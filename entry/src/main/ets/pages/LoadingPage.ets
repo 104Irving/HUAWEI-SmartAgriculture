@@ -7,9 +7,14 @@ struct LoadingPage{
     Row(){
       Column(){
         Text(this.message)
-          .fontSize(42)
+          .fontSize(30)
           .fontWeight(FontWeight.Bold)
-          .fontColor(Color.Green)
+          .fontColor(Color.Black)
+
+        LoadingProgress()
+          .color(Color.Blue)
+          .height(100)
+          .width(100)
       }
       .width('100%')
     }

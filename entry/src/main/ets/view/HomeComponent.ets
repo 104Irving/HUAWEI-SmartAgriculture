@@ -1,10 +1,42 @@
 import FarmBean from '../common/bean/FarmBean';
 import MainViewModel from '../model/MainViewModel';
+
 @Component
 export default struct HomeComponent{
-
   @State farmBean: FarmBean = null;
+  @State Ifdetailshow:Boolean = false;
   private timerId: number = 0;//计时器id，每5秒读取一次数据
+  @Builder ElementShow(name:String, detail:number){
+    Row() {
+      Text(`${name}`)
+        .fontSize(22)
+        .fontWeight(FontWeight.Bold)
+      Text(`${detail}`)
+        .fontSize(20)
+    }
+    .width('95%')
+    .justifyContent(FlexAlign.SpaceBetween)
+  }
+
+  @Builder DetialShow(){
+      Divider()
+        .width('95%')
+      Text('传感器数据')
+        .fontSize(24)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(Color.Orange)
+        .margin({ top: 10 })
+      Divider()
+        .width('95%')
+      this.ElementShow('温度', this.farmBean.temperature)
+      this.ElementShow('空气湿度', this.farmBean.humidity)
+      this.ElementShow('二氧化碳', this.farmBean.co2)
+      this.ElementShow('光照', this.farmBean.lumination)
+      this.ElementShow('二氧化碳', this.farmBean.co2)
+      this.ElementShow('土壤湿度', this.farmBean.soilHumidity)
+  }
+
+
 
   build(){
     Column({space:8}){
@@ -27,76 +59,16 @@ export default struct HomeComponent{
           .fontColor('#182431')
           .selectedOptionFont({ size: 22, weight: 600 })
           .optionFont({ size: 18, weight: 500 })
-
-      }.width('95%')
-      Divider().width('95%')
-      Text('传感器数据')
-        .fontSize(24)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(Color.Orange)
-        .margin({top:10})
-      Divider().width('95%')
-
-      //温度
-      Row(){
-        Text('温度:')
-          .fontSize(22)
-          .fontWeight(FontWeight.Bold)
-        //Text('22.5°C')
-        Text(`${this.farmBean.temperature}°C`)
-          .fontSize(20)
-
+          .onClick(()=> {
+            this.Ifdetailshow = true;
+          })
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
-
-      //湿度
-      Row(){
-        Text('空气湿度:')
-          .fontSize(22)
-          .fontWeight(FontWeight.Bold)
-        //Text('56%')
-        Text(`${this.farmBean.humidity}%`)
-          .fontSize(20)
-
+      if (this.Ifdetailshow){
+        this.DetialShow()
       }
-      .width('95%')
-      .justifyContent(FlexAlign.SpaceBetween)
 
-      //Co2浓度
-      Row(){
-        Text('二氧化碳:')
-          .fontSize(22)
-          .fontWeight(FontWeight.Bold)
-        Text(`${this.farmBean.co2}ppm`)
-          .fontSize(20)
-
-      }
-      .width('95%')
-      .justifyContent(FlexAlign.SpaceBetween)
-
-      //光照
-      Row(){
-        Text('光照:')
-          .fontSize(22)
-          .fontWeight(FontWeight.Bold)
-        Text(`${this.farmBean.lumination}Lux`)
-          .fontSize(20)
-
-      }
-      .width('95%')
-      .justifyContent(FlexAlign.SpaceBetween)
-
-      //土壤湿度
-      Row(){
-        Text('土壤湿度:')
-          .fontSize(22)
-          .fontWeight(FontWeight.Bold)
-        Text(`${this.farmBean.soilHumidity}%`)
-          .fontSize(20)
-      }
-      .width('95%')
-      .justifyContent(FlexAlign.SpaceBetween)
     }
     .width('100%')
     .height('100%')

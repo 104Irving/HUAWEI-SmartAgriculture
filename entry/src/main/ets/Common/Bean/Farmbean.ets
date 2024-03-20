@@ -1,5 +1,6 @@
 export default class FarmBean {
   fieldId: number;//农田ID
+  // fieldIndv:string;//农田属性
   name: string ;//农田名
   temperature: number;//温度
   humidity: number;//空气湿度
@@ -17,6 +18,7 @@ export default class FarmBean {
               soilHumidity: number)
   {
     this.fieldId = fieldId;
+    // this.fieldIndv = fieldIndv;
     this.name = name;
     this.temperature = temperature;
     this.humidity = humidity;
@@ -25,4 +27,5 @@ export default class FarmBean {
     this.soilHumidity = soilHumidity
   }
 }
+
 
