@@ -4,7 +4,7 @@ import MainViewModel from '../model/MainViewModel';
 @Component
 export default struct HomeComponent {
   @State farmBean: FarmBean = new FarmBean(1, '老张的玉米地', 22.5, 56, 30, 800, 25);
-  @State Ifdetailshow: Boolean = false;
+  @State Ifdetailshow: boolean = false;
   private timerId: number = 0; //计时器id，每5秒读取一次数据
 
   @Builder ElementShow(name: String, detail: number) {
