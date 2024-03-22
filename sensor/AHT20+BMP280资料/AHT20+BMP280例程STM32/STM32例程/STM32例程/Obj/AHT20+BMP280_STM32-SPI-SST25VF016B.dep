@@ -1,0 +1,90 @@
+Dependencies for Project 'AHT20+BMP280', Target 'STM32-SPI-SST25VF016B': (DO NOT MODIFY !)
+F (.\user\main.c)(0x5E823C22)(-c --cpu Cortex-M3 -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I .\FWlib\inc -I .\user -I .\CM3-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -DUSE_STM3210B_EVAL-o .\obj\main.o --omf_browse .\obj\main.crf --depend .\obj\main.d)
+I (.\CM3\stm32f10x.h)(0x4E0D24AB)
+I (.\CM3\core_cm3.h)(0x4D523B58)
+I (d:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (.\CM3\system_stm32f10x.h)(0x4D783CAA)
+I (.\FWlib\inc\stm32f10x_conf.h)(0x49D96952)
+I (.\FWlib\inc\stm32f10x_gpio.h)(0x4D783BB4)
+I (.\FWlib\inc\stm32f10x_rcc.h)(0x4D783BB4)
+I (.\FWlib\inc\stm32f10x_usart.h)(0x4D783BB4)
+I (.\FWlib\inc\misc.h)(0x4D783BB4)
+I (d:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (user\delay.h)(0x5E820232)
+I (user\bsp_i2c.h)(0x5E823794)
+I (user\ATH20.h)(0x5E82386F)
+I (.\FWlib\inc\stm32f10x_tim.h)(0x4D783BB4)
+F (.\FWlib\SRC\misc.c)(0x4D783BB4)(-c --cpu Cortex-M3 -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I .\FWlib\inc -I .\user -I .\CM3-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -DUSE_STM3210B_EVAL-o .\obj\misc.o --omf_browse .\obj\misc.crf --depend .\obj\misc.d)
+I (.\FWlib\inc\misc.h)(0x4D783BB4)
+I (.\CM3\stm32f10x.h)(0x4E0D24AB)
+I (.\CM3\core_cm3.h)(0x4D523B58)
+I (d:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (.\CM3\system_stm32f10x.h)(0x4D783CAA)
+I (.\FWlib\inc\stm32f10x_conf.h)(0x49D96952)
+I (.\FWlib\inc\stm32f10x_gpio.h)(0x4D783BB4)
+I (.\FWlib\inc\stm32f10x_rcc.h)(0x4D783BB4)
+F (.\user\bsp_i2c.c)(0x5E82385E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I .\FWlib\inc -I .\user -I .\CM3-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -DUSE_STM3210B_EVAL-o .\obj\bsp_i2c.o --omf_browse .\obj\bsp_i2c.crf --depend .\obj\bsp_i2c.d)
+I (user\bsp_i2c.h)(0x5E823794)
+I (.\CM3\stm32f10x.h)(0x4E0D24AB)
+I (.\CM3\core_cm3.h)(0x4D523B58)
+I (d:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (.\CM3\system_stm32f10x.h)(0x4D783CAA)
+I (.\FWlib\inc\stm32f10x_conf.h)(0x49D96952)
+I (.\FWlib\inc\stm32f10x_gpio.h)(0x4D783BB4)
+I (.\FWlib\inc\stm32f10x_rcc.h)(0x4D783BB4)
+I (.\FWlib\inc\stm32f10x_i2c.h)(0x4D783BB4)
+I (user\delay.h)(0x5E820232)
+I (.\FWlib\inc\misc.h)(0x4D783BB4)
+I (d:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+F (.\user\ATH20.c)(0x5E823B81)(-c --cpu Cortex-M3 -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I .\FWlib\inc -I .\user -I .\CM3-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -DUSE_STM3210B_EVAL-o .\obj\ath20.o --omf_browse .\obj\ath20.crf --depend .\obj\ath20.d)
+I (user\ATH20.h)(0x5E82386F)
+I (.\FWlib\inc\stm32f10x_tim.h)(0x4D783BB4)
+I (.\CM3\stm32f10x.h)(0x4E0D24AB)
+I (.\CM3\core_cm3.h)(0x4D523B58)
+I (d:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (.\CM3\system_stm32f10x.h)(0x4D783CAA)
+I (.\FWlib\inc\stm32f10x_conf.h)(0x49D96952)
+I (.\FWlib\inc\stm32f10x_gpio.h)(0x4D783BB4)
+I (.\FWlib\inc\stm32f10x_rcc.h)(0x4D783BB4)
+I (user\bsp_i2c.h)(0x5E823794)
+I (user\delay.h)(0x5E820232)
+I (.\FWlib\inc\misc.h)(0x4D783BB4)
+I (d:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+F (.\FWlib\SRC\stm32f10x_gpio.c)(0x4D79EEC6)(-c --cpu Cortex-M3 -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I .\FWlib\inc -I .\user -I .\CM3-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -DUSE_STM3210B_EVAL-o .\obj\stm32f10x_gpio.o --omf_browse .\obj\stm32f10x_gpio.crf --depend .\obj\stm32f10x_gpio.d)
+I (.\FWlib\inc\stm32f10x_gpio.h)(0x4D783BB4)
+I (.\CM3\stm32f10x.h)(0x4E0D24AB)
+I (.\CM3\core_cm3.h)(0x4D523B58)
+I (d:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (.\CM3\system_stm32f10x.h)(0x4D783CAA)
+I (.\FWlib\inc\stm32f10x_conf.h)(0x49D96952)
+I (.\FWlib\inc\stm32f10x_rcc.h)(0x4D783BB4)
+F (.\FWlib\SRC\stm32f10x_rcc.c)(0x4D783BB4)(-c --cpu Cortex-M3 -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I .\FWlib\inc -I .\user -I .\CM3-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -DUSE_STM3210B_EVAL-o .\obj\stm32f10x_rcc.o --omf_browse .\obj\stm32f10x_rcc.crf --depend .\obj\stm32f10x_rcc.d)
+I (.\FWlib\inc\stm32f10x_rcc.h)(0x4D783BB4)
+I (.\CM3\stm32f10x.h)(0x4E0D24AB)
+I (.\CM3\core_cm3.h)(0x4D523B58)
+I (d:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (.\CM3\system_stm32f10x.h)(0x4D783CAA)
+I (.\FWlib\inc\stm32f10x_conf.h)(0x49D96952)
+I (.\FWlib\inc\stm32f10x_gpio.h)(0x4D783BB4)
+F (.\FWlib\SRC\stm32f10x_usart.c)(0x4D783BB4)(-c --cpu Cortex-M3 -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I .\FWlib\inc -I .\user -I .\CM3-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -DUSE_STM3210B_EVAL-o .\obj\stm32f10x_usart.o --omf_browse .\obj\stm32f10x_usart.crf --depend .\obj\stm32f10x_usart.d)
+I (.\FWlib\inc\stm32f10x_usart.h)(0x4D783BB4)
+I (.\CM3\stm32f10x.h)(0x4E0D24AB)
+I (.\CM3\core_cm3.h)(0x4D523B58)
+I (d:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (.\CM3\system_stm32f10x.h)(0x4D783CAA)
+I (.\FWlib\inc\stm32f10x_conf.h)(0x49D96952)
+I (.\FWlib\inc\stm32f10x_gpio.h)(0x4D783BB4)
+I (.\FWlib\inc\stm32f10x_rcc.h)(0x4D783BB4)
+F (.\startup\startup_stm32f10x_hd.s)(0x4D783CDE)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include--pd "__UVISION_VERSION SETA 525" --pd "_RTE_ SETA 1" --pd "STM32F10X_HD SETA 1"--list .\list\startup_stm32f10x_hd.lst --xref -o .\obj\startup_stm32f10x_hd.o --depend .\obj\startup_stm32f10x_hd.d)
+F (.\CM3\core_cm3.c)(0x4C0C587E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I .\FWlib\inc -I .\user -I .\CM3-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -DUSE_STM3210B_EVAL-o .\obj\core_cm3.o --omf_browse .\obj\core_cm3.crf --depend .\obj\core_cm3.d)
+I (d:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+F (.\CM3\system_stm32f10x.c)(0x5D3F0460)(-c --cpu Cortex-M3 -D__MICROLIB -g -O2 --apcs=interwork --split_sections -I .\FWlib\inc -I .\user -I .\CM3-I.\RTE\_STM32-SPI-SST25VF016B-Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.3.0\CMSIS\Include-Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="525" -D_RTE_ -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_HD -DUSE_STM3210B_EVAL-o .\obj\system_stm32f10x.o --omf_browse .\obj\system_stm32f10x.crf --depend .\obj\system_stm32f10x.d)
+I (CM3\stm32f10x.h)(0x4E0D24AB)
+I (CM3\core_cm3.h)(0x4D523B58)
+I (d:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (CM3\system_stm32f10x.h)(0x4D783CAA)
+I (.\FWlib\inc\stm32f10x_conf.h)(0x49D96952)
+I (.\FWlib\inc\stm32f10x_gpio.h)(0x4D783BB4)
+I (.\CM3\stm32f10x.h)(0x4E0D24AB)
+I (.\FWlib\inc\stm32f10x_rcc.h)(0x4D783BB4)
+F (.\readme.txt)(0x00000000)()

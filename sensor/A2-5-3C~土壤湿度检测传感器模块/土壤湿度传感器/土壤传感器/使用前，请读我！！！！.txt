@@ -1,0 +1,4 @@
+1、库文件使用：请将库文件解压后以文件夹格式拖至Arduino文件夹下的Libraries文件夹里。
+    例：C:\Program Files (x86)\Arduino\libraries
+注：无库文件的，为Arduino IDE自带库，无需添加。
+2、原理图与技术手册为厂家提供，仅供参考使用，不提供技术支持。
