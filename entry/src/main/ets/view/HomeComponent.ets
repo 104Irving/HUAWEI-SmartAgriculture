@@ -1,8 +1,10 @@
 import FarmBean from '../common/bean/FarmBean';
+import UserInfoBean from '../Common/Bean/UserInfoBean';
 import MainViewModel from '../model/MainViewModel';
 
 @Component
 export default struct HomeComponent {
+  UserInfo: UserInfoBean
   @State farmBean: FarmBean = new FarmBean(1, '老张的玉米地', 22.5, 56, 30, 800, 25);
   @State Ifdetailshow: boolean = false;
   private timerId: number = 0; //计时器id，每5秒读取一次数据
@@ -69,39 +71,12 @@ export default struct HomeComponent {
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
-      Text(this.Ifdetailshow?'true':'false')
 
       this.DetialShow()
+      Text(`${this.UserInfo.Username}`)
     }
     .width('100%')
     .height('100%')
     .backgroundColor('#f1f2f3')
-  }
-}
-
-@Component
-export struct SelectEvent{
-  @Link @Watch('onClickIndexChanged') Ifdetailshow: Boolean;
-  onClickIndexChanged(){
-    this.Ifdetailshow = true;
-  }
-
-  build(){
-    Select([
-      { value: '一号田', icon: $r('app.media.leaf') },
-      { value: '二号田', icon: $r('app.media.leaf') },
-      { value: '三号田', icon: $r('app.media.leaf') },
-      { value: '四号田', icon: $r('app.media.leaf') },
-      { value: '五号田', icon: $r('app.media.leaf') }])
-      .selected(0)
-      .value('选择农田')
-      .font({ size: 24, weight: 600 })
-      .fontColor('#182431')
-      .selectedOptionFont({ size: 22, weight: 600 })
-      .optionFont({ size: 18, weight: 500 })
-      .onClick(() => {
-        this.Ifdetailshow = true;
-        console.info("it is true");
-      })
   }
 }
