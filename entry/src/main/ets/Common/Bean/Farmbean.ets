@@ -1,6 +1,5 @@
 export default class FarmBean {
   fieldId: number;//农田ID
-  // fieldIndv:string;//农田属性
   name: string ;//农田名
   temperature: number;//温度
   humidity: number;//空气湿度

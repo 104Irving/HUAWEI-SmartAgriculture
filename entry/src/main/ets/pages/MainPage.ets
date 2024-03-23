@@ -1,3 +1,4 @@
+import UserInfoBean from '../Common/Bean/UserInfoBean';
 import { TabID, TabItemList } from '../model/TabItem';
 import HomeComponent from '../view/HomeComponent';
 import { MineComponent } from '../view/MineComponent';
@@ -6,6 +7,7 @@ import { WaterPlanComponent } from '../view/WaterPlanComponent';
 @Entry
 @Component
 struct MainPage {
+  public User: UserInfoBean = new UserInfoBean("s", "s", []);
   @State PageIndex: number = 0; //页面索引
   private tabController: TabsController = new TabsController();//tab转换控制器
 
@@ -24,7 +26,7 @@ struct MainPage {
   build() {
     Tabs({barPosition:BarPosition.End}){
       TabContent(){
-        HomeComponent()
+        HomeComponent({UserInfo:this.User})
       }
       .tabBar(this.MyTabBuilder(TabID.HOME))
 
@@ -48,3 +50,7 @@ struct MainPage {
     })
   }
 }
+
+
+
+

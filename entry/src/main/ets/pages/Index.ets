@@ -1,10 +1,9 @@
-// xxx.ets
 import router from '@ohos.router'
 @Entry
 @Component
 struct Index {
   @State username: string = ''
-  @State password:string = ''
+  @State password: string = ''
 
   build() {
     Flex({direction:FlexDirection.Column,alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceAround}){
