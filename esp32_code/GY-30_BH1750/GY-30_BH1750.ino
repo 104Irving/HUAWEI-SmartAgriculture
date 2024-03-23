@@ -1,5 +1,5 @@
 #include <Wire.h>
-//SCL-22  SDA-23
+//SCL-22  SDA-21
 #define ADDRESS_BH1750FVI 0x23  //ADDR="L" for this module
 
 #define ONE_TIME_H_RESOLUTION_MODE 0x20
