@@ -4,22 +4,33 @@ import router from '@ohos.router';
 
 @Component
 export struct MineComponent {
-  @State nickname: string = 'Jerry'; // 昵称
-  @State signature: string = 'nothing to be told';//签名
-  // @State showcase: boolean[] = [false, false, false, false, false]//组件是否显示
+  @State user: UserInfoBean = new UserInfoBean("傻FUFU","fufu",[]);
+  @State signature: string = '是歌姬吧';//签名
 
   build(){
     Column(){
-      Column(){
-        Text(this.nickname)
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-        Text(this.signature)
-          .fontSize(14)
-          .fontColor(Color.Orange)
+      Row(){
+        Image($r('app.media.fufu'))
+          .width(100)
+          .height(100)
+          .margin(20)
+
+        Column(){
+          Text(this.user.Username)
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .textAlign(TextAlign.Start)
+            .margin(20)
+          Text(`签名:${this.signature}`)
+            .fontSize(14)
+            .fontColor(Color.Orange)
+            .textAlign(TextAlign.Start)
+        }
+        .justifyContent(FlexAlign.SpaceBetween)
+
       }
       .width('95%')
-      .margin(20)
+      .margin(10)
 
       //功能列表
       Column(){

@@ -10,7 +10,7 @@ export interface InfoItem {
 export const  MineItemList: InfoItem[] = [
   {
     id:'1',
-    title:'个人资料',
+    title:'修改个人资料',
     url:'MineShow'
   },
   {
