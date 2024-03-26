@@ -20,8 +20,7 @@ struct MainPage {
         .fontSize(14)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.PageIndex === idx ? '#006eee':'#888')
-    }
-  }
+    }}
 
   build() {
     Tabs({barPosition:BarPosition.End}){

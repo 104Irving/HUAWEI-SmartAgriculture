@@ -3,6 +3,7 @@
     "pages/Index",
     "pages/LoadingPage",
     "pages/MainPage",
-    "pages/MineShow"
+    "pages/MineShow",
+    "pages/DetailChart"
   ]
 }
