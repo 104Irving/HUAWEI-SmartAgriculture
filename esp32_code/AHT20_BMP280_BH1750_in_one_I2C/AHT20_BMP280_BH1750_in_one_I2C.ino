@@ -80,5 +80,5 @@ void loop(){
   Serial.print("气压: ");
   Serial.print(pressure/1000);
   Serial.println("KPa");
-  delay(1000);
+  //delay(1000);
 }
