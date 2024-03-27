@@ -24,19 +24,14 @@ struct MainPage {
 
   build() {
     Tabs({barPosition:BarPosition.End}){
-      TabContent(){
-        HomeComponent({UserInfo:this.User})
-      }
+      //主页
+      TabContent(){HomeComponent({UserInfo:this.User})}
       .tabBar(this.MyTabBuilder(TabID.HOME))
-
-      TabContent(){
-        WaterPlanComponent()
-      }
+      //灌溉计划
+      TabContent(){WaterPlanComponent()}
       .tabBar(this.MyTabBuilder(TabID.WATER_PLAN))
-
-      TabContent(){
-        MineComponent()
-      }
+      //用户页面
+      TabContent(){MineComponent()}
       .tabBar(this.MyTabBuilder(TabID.MINE))
     }
     .barWidth('100%')

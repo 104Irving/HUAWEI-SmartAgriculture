@@ -2,14 +2,22 @@
 import router from '@ohos.router'
 import {McLineChart, Options} from '@mcui/mccharts'
 
+interface ChartItem{
+  ItemName:string
+  //需要变量的数据表,需要联网获得
+}
 
 @Entry
 @Component
 struct DetailChart{
-
-  ElementList: string[] = [
-    '温度','空气湿度','二氧化碳','光照','土壤湿度'
+  @State ChartItemList: ChartItem[] = [
+    {ItemName:'温度'},
+    {ItemName:'空气湿度'},
+    {ItemName:'二氧化碳'},
+    {ItemName:'光照'},
+    {ItemName:'土壤湿度'},
   ]
+  @State ChartItemShowList:boolean[] = [false, false, false, false, false]
   @State name:string = '';
   @State seriesOption: Options = new Options({
     xAxis:{
@@ -22,10 +30,6 @@ struct DetailChart{
       {
         name:'最高气温',
         data:[11, 11, 15, 13, 12, 13, 10]
-      },
-      {
-        name:'最低气温',
-        data:[1, -2, 2, 5, 3, 2, 0]
       }
     ]
   })
@@ -51,12 +55,40 @@ struct DetailChart{
     // }, 2000)
   }
 
-  build(){
+  @Builder
+  ListItemShow(index:number){
     Column(){
-      Tabs(){
-
+      Text(this.ChartItemList[index].ItemName)
+        .fontSize(30)
+      if(this.ChartItemShowList[index]){
+        Column(){McLineChart({options: this.seriesOption})}
+        .width('100%')
+        .height('50%')
+        .transition({type:TransitionType.Insert, opacity:0})
       }
     }
+  }
+
+  build(){
+    Column(){
+      Text("详细详细")
+        .fontSize(30)
+      List({space:8}){
+        ForEach(this.ChartItemList, (Item: ChartItem, index:number) => {
+          ListItem() {
+            this.ListItemShow(index)
+          }
+          .backgroundColor("#ffffff")
+          .onClick(()=>{
+            animateTo({duration: 650, curve: Curve.Smooth},
+              () => {this.ChartItemShowList[index] = !this.ChartItemShowList[index]})
+          })
+        })
+      }
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor("#ffe9e9e9")
     //   //顶部栏
     //   Row({space: 50}) {
     //     //返回键
