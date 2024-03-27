@@ -47,13 +47,13 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
  *得到实际电压与电池电量              *
  ************************************/
 void VolChange(double V){
-  SendData.Voltage = -3.3126889904968743e-18*V*V*V*V*V*V*V\
-                     +1.623217605075953e-14*V*V*V*V*V*V\
-                     -3.3719331192434486e-11*V*V*V*V*V\
-                     +3.847999653156838e-8*V*V*V*V\
-                     -0.00002604499123955503*V*V*V\
-                     +0.010452452154782833*V*V\
-                     -2.3016342267679173*V\
+  SendData.Voltage = -3.3126889904968743e-18*V*V*V*V*V*V*V  \
+                     +1.623217605075953e-14*V*V*V*V*V*V     \
+                     -3.3719331192434486e-11*V*V*V*V*V      \
+                     +3.847999653156838e-8*V*V*V*V          \
+                     -0.00002604499123955503*V*V*V          \
+                     +0.010452452154782833*V*V              \
+                     -2.3016342267679173*V                  \
                      +214.85012707853883;
   SendData.Voltage *= 5;
   SendData.BatteryLevel = 100*(SendData.Voltage-3)/1.2;
