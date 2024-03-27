@@ -63,8 +63,7 @@ export default struct HomeComponent {
         })
     }
     .backgroundColor('#ffffffff')
-    .transition({type:TransitionType.Insert, opacity:0})
-    .transition({type:TransitionType.Delete, opacity:0})
+    .transition({type:TransitionType.All, opacity:0})
     .width('100%')
     // .opacity(this.FarmDetailShow[index]?1:0)//透明度选项
     // .animation({duration: 650, curve: Curve.Smooth})
@@ -82,6 +81,13 @@ export default struct HomeComponent {
 
           Text(name)
             .fontSize(20)
+
+          Image($r('app.media.water0'))
+            .width(40)
+            .height(40)
+            .margin(10)
+            .position({ x: "80%" })
+            .rotate({angle:this.FarmDetailShow[index]?0:270})
         }.align(Alignment.TopStart)
       }
       .width('100%')
@@ -121,6 +127,7 @@ export default struct HomeComponent {
           })
         })
       }
+      .height('100%')
       .listDirection(Axis.Vertical) //列表垂直方向布局
       // .divider({//列表项目的分割线
       //   strokeWidth: 1,
@@ -128,11 +135,16 @@ export default struct HomeComponent {
       //   endMargin: 10,
       //   color: '#a1949494' })
       // .scrollBar(BarState.Auto)
-      Divider().width('95%')
     }
     .width('100%')
     .height('100%')
     .backgroundColor('#ffe3e3e3')
+  }
 
+  pageTransition(){
+    PageTransitionEnter({ duration: 1200 })
+      .opacity(0)
+    PageTransitionExit({ duration: 1000 })
+      .opacity(0)
   }
 }

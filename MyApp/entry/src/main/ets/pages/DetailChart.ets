@@ -18,7 +18,8 @@ struct DetailChart{
     {ItemName:'土壤湿度'},
   ]
   @State ChartItemShowList:boolean[] = [false, false, false, false, false]
-  @State name:string = '';
+
+  //测试用数据图标
   @State seriesOption: Options = new Options({
     xAxis:{
       data:['周一','周二','周三','周四','周五','周六','周日']
@@ -34,10 +35,8 @@ struct DetailChart{
     ]
   })
 
-
+  //数据图标的更新
   aboutToAppear(){
-    this.name = router.getParams()?.['name']
-    console.log(this.name)
     // setTimeout(() => {
     //   // 传递需要修改的属性与数值，不需要全部传
     //   this.seriesOption.setVal({
@@ -55,16 +54,20 @@ struct DetailChart{
     // }, 2000)
   }
 
+  //呈现数据图表的函数
   @Builder
   ListItemShow(index:number){
     Column(){
-      Text(this.ChartItemList[index].ItemName)
-        .fontSize(30)
+      Row(){
+        Text(this.ChartItemList[index].ItemName)
+          .fontSize(30)
+      }.width("100%")
+
       if(this.ChartItemShowList[index]){
         Column(){McLineChart({options: this.seriesOption})}
         .width('100%')
         .height('50%')
-        .transition({type:TransitionType.Insert, opacity:0})
+        .transition({type:TransitionType.All, opacity:0,translate: { x: 0, y: -200 }})
       }
     }
   }
@@ -85,6 +88,7 @@ struct DetailChart{
           })
         })
       }
+      .height("100%")
     }
     .width('100%')
     .height('100%')

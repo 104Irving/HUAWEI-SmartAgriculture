@@ -43,6 +43,13 @@ struct MainPage {
       this.PageIndex = index;
     })
   }
+
+  pageTransition(){
+    PageTransitionEnter({ duration: 1200 })
+      .opacity(0)
+    PageTransitionExit({ duration: 1000 })
+      .opacity(0)
+  }
 }
 
 
