@@ -1,0 +1,14 @@
+.\obj\bsp_i2c.o: user\bsp_i2c.c
+.\obj\bsp_i2c.o: user\bsp_i2c.h
+.\obj\bsp_i2c.o: .\CM3\stm32f10x.h
+.\obj\bsp_i2c.o: .\CM3\core_cm3.h
+.\obj\bsp_i2c.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\obj\bsp_i2c.o: .\CM3\system_stm32f10x.h
+.\obj\bsp_i2c.o: .\FWlib\inc\stm32f10x_conf.h
+.\obj\bsp_i2c.o: .\FWlib\inc\stm32f10x_gpio.h
+.\obj\bsp_i2c.o: .\CM3\stm32f10x.h
+.\obj\bsp_i2c.o: .\FWlib\inc\stm32f10x_rcc.h
+.\obj\bsp_i2c.o: .\FWlib\inc\stm32f10x_i2c.h
+.\obj\bsp_i2c.o: user\delay.h
+.\obj\bsp_i2c.o: .\FWlib\inc\misc.h
+.\obj\bsp_i2c.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
