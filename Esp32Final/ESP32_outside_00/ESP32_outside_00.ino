@@ -59,7 +59,30 @@ void VolChange(double V){
   SendData.BatteryLevel = 100*(SendData.Voltage-3)/1.2;
 }
 
+void Test(esp_err_t result){
+  /*调试代码(输出数据,检测数据发送是否成功.etc)*/
+  /*检测数据发送是否成功*/
+  if (result == ESP_OK) {
+    Serial.println("Sent with success");
+  }
+  else {
+    Serial.println("Error sending the data");
+  }
+  /*打印数据*/
+  Serial.print("土壤湿度:");
+  Serial.println(SendData.SoilMoisture);
+  Serial.print("电池电压:");
+  Serial.println(SendData.Voltage);
+  Serial.print("电池电量:");
+  Serial.println(SendData.BatteryLevel);
+  Serial.print("水泵状态:");
+  Serial.println(ReceiveData.Bump);
+}
+
 void setup() {
+  //开启串口
+  Serial.begin(115200);
+
   //开启端口
   pinMode(BumpPin,OUTPUT);
   pinMode(SoilMoisturePin,INPUT);
@@ -112,10 +135,14 @@ void Task0code(void * pvParameters){
   SendData.SoilMoisture=(SM,2200,1200,0,100);
 
   //发送数据(每十秒发送一次)
-  esp_now_send(ReceiverAddress, (uint8_t *) &SendData, sizeof(SendData));
-  delay(10000);
+  esp_err_t result = esp_now_send(ReceiverAddress, (uint8_t *) &SendData, sizeof(SendData));
+  delay(500);
+
+  //调试端口(默认关闭)
+  // Test(result);
 }
 
+//待改进:切换水泵状态
 void loop() {
   //比对数据并决定是否更改水泵状态
   if(ReceiveData.Bump!=cmp){
