@@ -51,7 +51,7 @@ void loop(){
   Serial.print("电量：");
   Serial.print(battery);
   Serial.println("％");
-  //Serial.println(analogRead(analogPin));
+  Serial.println(analogRead(analogPin));
   delay(1000);
 
 }
