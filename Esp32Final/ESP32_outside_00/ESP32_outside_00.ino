@@ -59,8 +59,8 @@ void VolChange(double V){
   SendData.BatteryLevel = 100*(SendData.Voltage-3)/1.2;
 }
 
+/*调试代码(输出数据,检测数据发送是否成功.etc)*/
 void Test(esp_err_t result){
-  /*调试代码(输出数据,检测数据发送是否成功.etc)*/
   /*检测数据发送是否成功*/
   if (result == ESP_OK) {
     Serial.println("Sent with success");
