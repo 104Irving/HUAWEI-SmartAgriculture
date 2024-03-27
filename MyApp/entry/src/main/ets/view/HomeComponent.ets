@@ -26,13 +26,13 @@ export default struct HomeComponent {
     }
     .width('95%')
     .justifyContent(FlexAlign.SpaceBetween)
-    .onClick(()=>{
-      router.pushUrl({
-        url:'pages/DetailChart',
-        params: name
-      })
-      console.log(name)
-    })
+    // .onClick(()=>{
+    //   router.pushUrl({
+    //     url:'pages/DetailChart',
+    //     params: {'name':name}
+    //   })
+    //   console.log(name)
+    // })
   }
 
   //显示农田的数据的函数
@@ -51,10 +51,21 @@ export default struct HomeComponent {
       this.ElementShow('空气湿度', FarmbeanObj.humidity)
       this.ElementShow('二氧化碳', FarmbeanObj.co2)
       this.ElementShow('光照', FarmbeanObj.lumination)
-      this.ElementShow('二氧化碳', FarmbeanObj.co2)
       this.ElementShow('土壤湿度', FarmbeanObj.soilHumidity)
+
+      //跳转到详细信息及历史数据表的按钮
+      Button('详细信息')
+      .backgroundColor('#ff3b89cb')
+        .onClick(()=>{
+          router.pushUrl({
+            url:'pages/DetailChart'
+          })
+        })
     }
+    .backgroundColor('#ffffffff')
     .transition({type:TransitionType.Insert, opacity:0})
+    .transition({type:TransitionType.Delete, opacity:0})
+    .width('100%')
     // .opacity(this.FarmDetailShow[index]?1:0)//透明度选项
     // .animation({duration: 650, curve: Curve.Smooth})
   }
@@ -73,6 +84,8 @@ export default struct HomeComponent {
             .fontSize(20)
         }.align(Alignment.TopStart)
       }
+      .width('100%')
+      .backgroundColor('#ffffff')
 
       Row(){
         if(this.FarmDetailShow[index]==true){
@@ -94,7 +107,7 @@ export default struct HomeComponent {
       Divider().width('95%')
 
       //显示农田列表
-      List() {
+      List({space: 8}) {
         ForEach(this.FarmDetailShow, (FarmShow:boolean, index:number) => {
           ListItem() {
             this.FarmListItem(this.FarmList[index].name, this.FarmList[index].fieldId)
@@ -119,7 +132,7 @@ export default struct HomeComponent {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#f1f2f3')
+    .backgroundColor('#ffe3e3e3')
 
   }
 }
