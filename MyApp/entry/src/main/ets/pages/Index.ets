@@ -37,6 +37,12 @@ struct Index {
     }
     .width('100%')
     .height('100%')
+  }
 
+  pageTransition(){
+    PageTransitionEnter({ duration: 600 })
+      .opacity(0)
+    PageTransitionExit({ duration: 600 })
+      .opacity(0)
   }
 }

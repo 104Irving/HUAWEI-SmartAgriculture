@@ -35,4 +35,11 @@ struct LoadingPage{
     }
     .height('100%')
   }
+
+  pageTransition(){
+    PageTransitionEnter({ duration: 600 })
+      .opacity(0)
+    PageTransitionExit({ duration: 560 })
+      .opacity(0)
+  }
 }
