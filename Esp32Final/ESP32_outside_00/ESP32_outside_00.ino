@@ -26,7 +26,7 @@ typedef struct EspNowDataReceive{
   int Time;                    //单次灌溉时长
   int Interval;                //计划操作时,间隔时间(单位:ms)
   };
-  bump Bump;   
+  bump Bump;
 } EspNowDataReceive;
 EspNowDataReceive ReceiveData;
 
