@@ -3,7 +3,6 @@
  *室外温湿度、降雨、气压   *
  *愿意和我一辈子搞嵌入式吗?*
  *************************/
-//降雨传感器待完成
 #include <Wire.h>
 #include <WiFi.h>
 #include <BMP280.h>
@@ -35,6 +34,35 @@ uint8_t ReceiverAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x2C, 0xE0};
 Adafruit_AHTX0 aht;
 BMP280 bmp280;
 
+//定义端口
+const int RainPin=4;           //降雨传感器
+
+//设置降雨传感器采样数量
+const int NumRead=5;           //采样数量
+int RainRead[NumRead];         //存储样本
+int Point=0;                   //指示目前最新数据
+
+//初始化降雨传感器数据
+void InitRain(){
+  for(int i=0;i<NumRead;i++){
+    RainRead[i]=analogRead(RainPin);
+    delay(5);
+  }
+  return;
+}
+
+//读取降雨传感器数据
+double RainGet(){
+  int sum=0;
+  for(int i=0;i<NumRead;i++){
+    sum+=RainRead[i];
+  }
+  //返回降雨值(百分数)
+  double ave=sum/NumRead;
+  double per=(1-((ave-900)/1300.0))*100;
+  return per;
+}
+
 //检测是否初始化成功
 void Detect(){
   //Aht20初始化
@@ -52,8 +80,33 @@ void Detect(){
   Serial.println("Aht20&Bmp280 initial successfully!");
 }
 
+//用于espnow初始化(本机发送数据)
+void EspNowConnect(){
+  //绑定数据接收端
+  esp_now_peer_info_t peerInfo;
+  memcpy(peerInfo.peer_addr, ReceiverAddress, 6);
+  peerInfo.channel = 0;
+  peerInfo.encrypt = false;
+
+  //使能wifi
+  peerInfo.ifidx = WIFI_IF_STA;
+
+  //检查设备是否配对成功
+  while (esp_now_add_peer(&peerInfo) != ESP_OK) {
+    Serial.println("Failed to add peer");
+    delay(100);
+  }
+
+  // 初始化espnow
+  WiFi.mode(WIFI_STA);
+  while (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+    delay(100);
+  }
+}
+
 /*调试代码(输出数据,检测数据发送是否成功.etc)*/
-void Test(esp_err_t result){
+inline void Test(esp_err_t *result){
   /*检测数据发送是否成功*/
   if (result == ESP_OK) {
     Serial.println("Sent with success");
@@ -79,34 +132,18 @@ void setup() {
   //初始化I2C总线
   // Wire.begin(SDA_PIN_2, SCL_PIN_2);
   Wire.begin(SDA_PIN_1, SCL_PIN_1);
-  /*意义不明的代码(待确认)
+  /**意义不明的代码(待确认)
    *Wire.beigin;
-   **/
- 
-  // 初始化espnow
-  WiFi.mode(WIFI_STA);
-  while (esp_now_init() != ESP_OK) {
-    Serial.println("Error initializing ESP-NOW");
-    delay(100);
-  }
+  **/
 
-  //绑定数据接收端
-  esp_now_peer_info_t peerInfo;
-  memcpy(peerInfo.peer_addr, ReceiverAddress, 6);
-  peerInfo.channel = 0;
-  peerInfo.encrypt = false;
-
-  //使能wifi
-  peerInfo.ifidx = WIFI_IF_STA;
-
-  //检查设备是否配对成功
-  while (esp_now_add_peer(&peerInfo) != ESP_OK) {
-    Serial.println("Failed to add peer");
-    delay(100);
-  }
+  //espnow,start!!!!!
+  EspNowConnect();
 
   //初始化Aht20&Bmp280
   Detect();
+
+  //初始化雨水数据
+  InitRain();
 }
 
 void loop() {
@@ -118,30 +155,15 @@ void loop() {
   SendData.Temperature=Temp.temperature;
   SendData.AirHumidity=Humidity.relative_humidity;
 
+  //读取雨水传感器数值
+  RainRead[++Point]=analogRead(RainPin);
+  Point%=5;
+  SendData.Rain=RainGet();
+
   //发送数据
   esp_err_t result = esp_now_send(ReceiverAddress, (uint8_t *) &SendData, sizeof(SendData));
   delay(1000);
 
   //调试端口(默认关闭)
-  // Test(result);
+  // Test(&result);
 }
-
-/*附GY-30指令集合***************************************************************************************
- *           断电           *0000_0000*无激活状态                                                      *
- ******************************************************************************************************
- *           通电           *0000_0001*等待测量指令                                                    *
- ******************************************************************************************************
- *           重置           *0000_0111*重置数字寄存器值,重置指令在断电模式下不起作用                      *
- ******************************************************************************************************
- *连续H(ADDR->VCC)分辨率模式 *0001_0000*在11x分辨率下开始测量,测量时间一般为120ms                         *
- ******************************************************************************************************
- *连续H(ADDR->VCC)分辨率模式 *0001_0001*在0.51x分辨率开始测量,测量时间一般为120ms                         *
- ******************************************************************************************************
- *连续L(ADDR->GND)分辨率模式 *0001_0011*在411x分辨率下开始测量,测试时间一般为16ms                         *
- ******************************************************************************************************
- *一次H(ADDR->VCC)分辨率模式 *0010_0000*在11x分辨率下开始测量,测试时间一般为120ms,测试后自动设置为断电模式  *
- ******************************************************************************************************
- *一次H(ADDR->VCC)分辨率模式2*0010_0001*在0.51x分辨率下开始测量,测试时间一般为120ms,测试后自动设置为断电模式*
- ******************************************************************************************************
- *一次L(ADDR->GND)分辨率模式 *0010_0011*在411x分辨率下开始测量,测试时间一般为16ms,测试后自动设置为断电模式  *
- ******************************************************************************************************/
