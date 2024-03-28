@@ -20,18 +20,16 @@ export const TabItemList: TabItem[] = [
 
   },
   {
+  icon:$r('app.media.user0'),
+  icon_selected: $r('app.media.user1'),
+  title: '我的',
+  id:TabID.MINE },
+  {
     icon:$r('app.media.water0'),
     icon_selected: $r('app.media.water1'),
     title: '灌溉计划',
     id:TabID.WATER_PLAN
-
-  },
-  {
-    icon:$r('app.media.user0'),
-    icon_selected: $r('app.media.user1'),
-    title: '我的',
-    id:TabID.MINE
-
   }
+
 
 ]

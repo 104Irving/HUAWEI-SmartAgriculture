@@ -1,6 +1,7 @@
 import FarmBean from '../common/bean/FarmBean';
 import UserInfoBean from '../Common/Bean/UserInfoBean';
 import router from '@ohos.router';
+import {ChartItem, ChartItemList} from '../model/ChartItem'
 
 @Component
 export default struct HomeComponent {
@@ -47,11 +48,12 @@ export default struct HomeComponent {
         .margin({ top: 10 })
       Divider()
         .width('95%')
-      this.ElementShow('温度', FarmbeanObj.temperature)
-      this.ElementShow('空气湿度', FarmbeanObj.humidity)
-      this.ElementShow('二氧化碳', FarmbeanObj.co2)
-      this.ElementShow('光照', FarmbeanObj.lumination)
-      this.ElementShow('土壤湿度', FarmbeanObj.soilHumidity)
+
+      this.ElementShow(ChartItemList[0].ItemName, FarmbeanObj.temperature)
+      this.ElementShow(ChartItemList[1].ItemName, FarmbeanObj.humidity)
+      this.ElementShow(ChartItemList[2].ItemName, FarmbeanObj.co2)
+      this.ElementShow(ChartItemList[3].ItemName, FarmbeanObj.lumination)
+      this.ElementShow(ChartItemList[4].ItemName, FarmbeanObj.soilHumidity)
 
       //跳转到详细信息及历史数据表的按钮
       Button('详细信息')

@@ -20,7 +20,8 @@ struct MainPage {
         .fontSize(14)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.PageIndex === idx ? '#006eee':'#888')
-    }}
+    }
+  }
 
   build() {
     Tabs({barPosition:BarPosition.End}){
@@ -28,8 +29,8 @@ struct MainPage {
       TabContent(){HomeComponent({UserInfo:this.User})}
       .tabBar(this.MyTabBuilder(TabID.HOME))
       //灌溉计划
-      TabContent(){WaterPlanComponent()}
-      .tabBar(this.MyTabBuilder(TabID.WATER_PLAN))
+      // TabContent(){WaterPlanComponent()}
+      // .tabBar(this.MyTabBuilder(TabID.WATER_PLAN))
       //用户页面
       TabContent(){MineComponent()}
       .tabBar(this.MyTabBuilder(TabID.MINE))
@@ -45,9 +46,9 @@ struct MainPage {
   }
 
   pageTransition(){
-    PageTransitionEnter({ duration: 1200 })
+    PageTransitionEnter({ duration: 600 })
       .opacity(0)
-    PageTransitionExit({ duration: 1000 })
+    PageTransitionExit({ duration: 600 })
       .opacity(0)
   }
 }
