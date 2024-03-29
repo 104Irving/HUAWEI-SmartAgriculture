@@ -9,6 +9,7 @@ struct Index {
 
   build() {
     Flex({direction:FlexDirection.Column,alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceAround}){
+
       Text('农业灌溉登入端')
         .fontSize(24)
         .fontColor(0xCC6CE7)
@@ -55,6 +56,7 @@ struct Index {
     .height('100%')
   }
 
+  //页面切换
   pageTransition(){
     PageTransitionEnter({ duration: 600 })
       .opacity(0)

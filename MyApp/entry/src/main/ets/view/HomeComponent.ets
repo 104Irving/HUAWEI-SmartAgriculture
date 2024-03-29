@@ -42,13 +42,6 @@ export default struct HomeComponent {
     }
     .width('95%')
     .justifyContent(FlexAlign.SpaceBetween)
-    // .onClick(()=>{
-    //   router.pushUrl({
-    //     url:'pages/DetailChart',
-    //     params: {'name':name}
-    //   })
-    //   console.log(name)
-    // })
   }
 
   //显示农田的数据的函数
@@ -74,6 +67,7 @@ export default struct HomeComponent {
       Divider()
         .width('95%')
 
+      //每一行都是具体数据
       this.ElementShow(ChartItemList[0].ItemName, FarmbeanObj.temperature)
       this.ElementShow(ChartItemList[1].ItemName, FarmbeanObj.humidity)
       this.ElementShow(ChartItemList[2].ItemName, FarmbeanObj.co2)
@@ -101,6 +95,7 @@ export default struct HomeComponent {
     Column(){
       Row() {
         Row(){
+          //叶子
           Image($r('app.media.leaf'))
             .width(40)
             .height(40)
@@ -109,6 +104,7 @@ export default struct HomeComponent {
           Text(name)
             .fontSize(20)
 
+          //箭头,被点击后会旋转九十度
           Image($r('app.media.Arrow'))
             .width(40)
             .height(40)
@@ -120,18 +116,21 @@ export default struct HomeComponent {
       .width('100%')
       .backgroundColor('#ffffff')
 
+      //点击后显示具体数据
       Row(){
         if(this.FarmDetailShow[index]==true){
           this.DetailShow(this.FarmList[index])
         }
       }
-      .opacity(this.FarmDetailShow[index]?0.9:0)//透明度选项
+      .opacity(this.FarmDetailShow[index]?0.9:0)
     }
   }
 
+  //展示农田列表的函数
   @Builder FarmListShow(){
     List({space: 8}) {
       ForEach(this.FarmDetailShow, (FarmShow:boolean, index:number) => {
+        //FarmShow不能删除,删除会不能预览
         ListItem() {
           this.FarmListItem(this.FarmList[index].name, this.FarmList[index].fieldId)
         }
@@ -158,6 +157,7 @@ export default struct HomeComponent {
         .margin({ top: 10 })
       Divider().width('95%')
 
+      //室内外tab转换
       Tabs({barPosition:BarPosition.Start}){
         //室内农田
         TabContent(){this.FarmListShow()}
@@ -180,6 +180,7 @@ export default struct HomeComponent {
     .backgroundColor('#ffe3e3e3')
   }
 
+  //页面转换
   pageTransition(){
     PageTransitionEnter({ duration: 1200 })
       .opacity(0)
