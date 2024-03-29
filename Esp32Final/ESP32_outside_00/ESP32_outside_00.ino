@@ -21,10 +21,10 @@ EspNowDataSend SendData;
 //espnow接收数据结构体
 typedef struct EspNowDataReceive{
   struct bump{
-  int State;                   //水泵操作模式 0->由单片机自主控制;1->强制开启;2->计划
-  int Switch;                  //水泵开关 0->关闭;1->开启
-  int Time;                    //单次灌溉时长
-  int Interval;                //计划操作时,间隔时间(单位:ms)
+    int State;                   //水泵操作模式 0->由单片机自主控制;1->手动控制;2->计划
+    int Switch;                  //水泵开关 0->关闭;1->开启
+    int Time;                    //单次灌溉时长,默认为3s
+    int Interval;                //计划操作时,间隔时间(单位:ms)
   };
   bump Bump;
 } EspNowDataReceive;
@@ -45,7 +45,6 @@ const int VoltagePin=34;       //电池电压针脚
 const int NumRead=5;           //采样数量
 int MoistRead[NumRead];        //存储样本
 int Point=0;                   //指示目前最新数据
-int TimePer=3000;              //由单片机控制时,单次灌溉时长(目前为3s)
 unsigned long long TimeStamp;  //时间戳,用于控制灌溉时间
 
 //数据接收回调函数
@@ -169,6 +168,9 @@ void setup() {
 
   //初始化土壤湿度数据
   InitMoist();
+
+  //将灌溉时间初始化为3s
+  ReceiveData.Bump.Time=3000;
 }
 
 void Task0code(void * pvParameters){
@@ -197,21 +199,21 @@ void loop() {
       if(SendData.SoilMoisture<20){
         digitalWrite(BumpPin,HIGH);
         TimeStamp=millis();
-        while(millis()-TimeStamp<TimePer);
+        while(millis()-TimeStamp<ReceiveData.Bump.Time);
         digitalWrite(BumpPin,LOW);
       }
       //土壤非常干旱情况
       else if(SendData.SoilMoisture<50){
-        TimePer=5000;
+        ReceiveData.Bump.Time=5000;
         digitalWrite(BumpPin,HIGH);
         TimeStamp=millis();
-        while(millis()-TimeStamp<TimePer);
+        while(millis()-TimeStamp<ReceiveData.Bump.Time);
         digitalWrite(BumpPin,LOW);
-        TimePer=3000;
+        ReceiveData.Bump.Time=3000;
       }
       TimeStamp=0;
     break;
-  /*强制开启水泵*/
+  /*手动控制水泵*/
   case 1:
       //比对数据并决定是否更改水泵状态
       if(ReceiveData.Bump.Switch!=cmp){
@@ -233,7 +235,7 @@ void loop() {
       if(millis()-TimeStamp>ReceiveData.Bump.Interval){
         TimeStamp=millis();
         digitalWrite(BumpPin,HIGH);
-        while(millis()-TimeStamp<TimePer);
+        while(millis()-TimeStamp<ReceiveData.Bump.Time);
         digitalWrite(BumpPin,LOW);
         TimeStamp=millis();
       }
