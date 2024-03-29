@@ -7,7 +7,7 @@
 #include <WiFi.h>
 #include <esp_now.h>
 
-//任务〇
+//任务〇(数据)
 TaskHandle_t Task0;
 
 //espnow传输数据结构体
@@ -180,7 +180,7 @@ void Task0code(void * pvParameters){
 
   //读取土壤湿度数据并处理
   MoistRead[++Point]=analogRead(SoilMoisturePin);
-  Point%=5;
+  Point%=NumRead;
   SendData.SoilMoisture=SoilMoistGet();
 
   //发送数据(每0.5秒发送一次)
