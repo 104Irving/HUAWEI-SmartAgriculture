@@ -129,6 +129,9 @@ void setup() {
   //初始化串口
   Serial.begin(115200);
 
+  //初始化端口
+  pinMode(RainPin,INPUT);
+
   //初始化I2C总线
   // Wire.begin(SDA_PIN_2, SCL_PIN_2);
   Wire.begin(SDA_PIN_1, SCL_PIN_1);
@@ -157,7 +160,7 @@ void loop() {
 
   //读取雨水传感器数值
   RainRead[++Point]=analogRead(RainPin);
-  Point%=5;
+  Point%=NumRead;
   SendData.Rain=RainGet();
 
   //发送数据
