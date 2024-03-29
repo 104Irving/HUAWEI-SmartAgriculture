@@ -1,10 +1,13 @@
 import FarmBean from '../common/bean/FarmBean';
 import UserInfoBean from '../Common/Bean/UserInfoBean';
 import router from '@ohos.router';
+import { ChartItemList} from '../model/ChartItem'
+import { FarmIOTabList, FarmTabID } from '../model/TabItem';
 
 @Component
 export default struct HomeComponent {
   UserInfo: UserInfoBean
+  @State PageIndex: number = 0;
 
   //测试数据
   @State FarmList:FarmBean[] =
@@ -14,6 +17,18 @@ export default struct HomeComponent {
       new FarmBean(3, '四号田', 22.5, 59, 30, 800, 25),
       new FarmBean(4, 'fufu的大米田', 22.5, 60, 30, 800, 25)]
   @State FarmDetailShow:boolean[] = [false, false, false, false,false]
+
+  @Builder MyTabBuilder(idx: number){
+    Column(){
+      Image(idx == this.PageIndex ? FarmIOTabList[idx].icon_selected : FarmIOTabList[idx].icon)
+        .width(32)
+        .height(32)
+      Text(FarmIOTabList[idx].title)
+        .fontSize(14)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.PageIndex === idx ? '#006eee':'#888')
+    }
+  }
 
   //显示农田每一行的数据的函数
   @Builder ElementShow(name: string, detail: number) {
@@ -47,11 +62,12 @@ export default struct HomeComponent {
         .margin({ top: 10 })
       Divider()
         .width('95%')
-      this.ElementShow('温度', FarmbeanObj.temperature)
-      this.ElementShow('空气湿度', FarmbeanObj.humidity)
-      this.ElementShow('二氧化碳', FarmbeanObj.co2)
-      this.ElementShow('光照', FarmbeanObj.lumination)
-      this.ElementShow('土壤湿度', FarmbeanObj.soilHumidity)
+
+      this.ElementShow(ChartItemList[0].ItemName, FarmbeanObj.temperature)
+      this.ElementShow(ChartItemList[1].ItemName, FarmbeanObj.humidity)
+      this.ElementShow(ChartItemList[2].ItemName, FarmbeanObj.co2)
+      this.ElementShow(ChartItemList[3].ItemName, FarmbeanObj.lumination)
+      this.ElementShow(ChartItemList[4].ItemName, FarmbeanObj.soilHumidity)
 
       //跳转到详细信息及历史数据表的按钮
       Button('详细信息')
@@ -102,6 +118,25 @@ export default struct HomeComponent {
     }
   }
 
+  @Builder FarmListShow(){
+    List({space: 8}) {
+      ForEach(this.FarmDetailShow, (FarmShow:boolean, index:number) => {
+        ListItem() {
+          this.FarmListItem(this.FarmList[index].name, this.FarmList[index].fieldId)
+        }
+        // .opacity(0.7)//透明度选项
+        .onClick(()=>{
+          animateTo({
+            duration: 650,
+            curve: Curve.Smooth },
+            () => {this.FarmDetailShow[index] = !this.FarmDetailShow[index]})
+        })
+      })
+    }
+    .height('100%')
+    .listDirection(Axis.Vertical) //列表垂直方向布局
+  }
+
   //主构造体
   build() {
     Column({ space: 8 }) {
@@ -112,29 +147,39 @@ export default struct HomeComponent {
         .margin({ top: 10 })
       Divider().width('95%')
 
-      //显示农田列表
-      List({space: 8}) {
-        ForEach(this.FarmDetailShow, (FarmShow:boolean, index:number) => {
-          ListItem() {
-            this.FarmListItem(this.FarmList[index].name, this.FarmList[index].fieldId)
-          }
-          // .opacity(0.7)//透明度选项
-          .onClick(()=>{
-            animateTo({
-              duration: 650,
-              curve: Curve.Smooth },
-              () => {this.FarmDetailShow[index] = !this.FarmDetailShow[index]})
-          })
-        })
+      Tabs({barPosition:BarPosition.Start}){
+        //室内农田
+        TabContent(){this.FarmListShow()}
+        .tabBar(this.MyTabBuilder(FarmTabID.INDOOR))
+        //室外农田
+        TabContent(){this.FarmListShow()}
+        .tabBar(this.MyTabBuilder(FarmTabID.OUTDOOR))
       }
+      .barWidth('100%')
+      .barMode(BarMode.Fixed)
+      .width('100%')
       .height('100%')
-      .listDirection(Axis.Vertical) //列表垂直方向布局
-      // .divider({//列表项目的分割线
-      //   strokeWidth: 1,
-      //   startMargin: 60,
-      //   endMargin: 10,
-      //   color: '#a1949494' })
-      // .scrollBar(BarState.Auto)
+      .onChange((index)=>{//绑定onChange函数切换页签
+        this.PageIndex = index;
+      })
+
+      //显示农田列表
+      // List({space: 8}) {
+      //   ForEach(this.FarmDetailShow, (FarmShow:boolean, index:number) => {
+      //     ListItem() {
+      //       this.FarmListItem(this.FarmList[index].name, this.FarmList[index].fieldId)
+      //     }
+      //     // .opacity(0.7)//透明度选项
+      //     .onClick(()=>{
+      //       animateTo({
+      //         duration: 650,
+      //         curve: Curve.Smooth },
+      //         () => {this.FarmDetailShow[index] = !this.FarmDetailShow[index]})
+      //     })
+      //   })
+      // }
+      // .height('100%')
+      // .listDirection(Axis.Vertical) //列表垂直方向布局
     }
     .width('100%')
     .height('100%')
