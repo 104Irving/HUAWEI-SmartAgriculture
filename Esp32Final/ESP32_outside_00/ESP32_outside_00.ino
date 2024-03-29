@@ -211,6 +211,7 @@ void loop() {
         digitalWrite(BumpPin,LOW);
         ReceiveData.Bump.Time=3000;
       }
+      cmp=3;
       TimeStamp=0;
     break;
   /*手动控制水泵*/
@@ -225,6 +226,7 @@ void loop() {
           digitalWrite(BumpPin,LOW);
         }
       }
+      TimeStamp=0;
     break;
   /*计划灌溉*/
   case 2:
@@ -239,6 +241,7 @@ void loop() {
         digitalWrite(BumpPin,LOW);
         TimeStamp=millis();
       }
+      cmp=3;
     break;
   }
 }
