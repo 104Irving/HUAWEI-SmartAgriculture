@@ -1,5 +1,5 @@
 import UserInfoBean from '../Common/Bean/UserInfoBean';
-import { TabID, TabItemList } from '../model/TabItem';
+import { MainTabID, MainTabItemList } from '../model/TabItem';
 import HomeComponent from '../view/HomeComponent';
 import { MineComponent } from '../view/MineComponent';
 import { WaterPlanComponent } from '../view/WaterPlanComponent';
@@ -13,10 +13,10 @@ struct MainPage {
 
   @Builder MyTabBuilder(idx: number){
     Column(){
-      Image(idx == this.PageIndex ? TabItemList[idx].icon_selected : TabItemList[idx].icon)
+      Image(idx == this.PageIndex ? MainTabItemList[idx].icon_selected : MainTabItemList[idx].icon)
         .width(32)
         .height(32)
-      Text(TabItemList[idx].title)
+      Text(MainTabItemList[idx].title)
         .fontSize(14)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.PageIndex === idx ? '#006eee':'#888')
@@ -27,13 +27,13 @@ struct MainPage {
     Tabs({barPosition:BarPosition.End}){
       //主页
       TabContent(){HomeComponent({UserInfo:this.User})}
-      .tabBar(this.MyTabBuilder(TabID.HOME))
+      .tabBar(this.MyTabBuilder(MainTabID.HOME))
       //灌溉计划
       // TabContent(){WaterPlanComponent()}
-      // .tabBar(this.MyTabBuilder(TabID.WATER_PLAN))
+      // .tabBar(this.MyTabBuilder(MainTabID.WATER_PLAN))
       //用户页面
       TabContent(){MineComponent()}
-      .tabBar(this.MyTabBuilder(TabID.MINE))
+      .tabBar(this.MyTabBuilder(MainTabID.MINE))
     }
     .barWidth('100%')
     .barMode(BarMode.Fixed)

@@ -5,31 +5,42 @@ export interface TabItem {
   id: number;
 }
 
-export enum TabID {
+export enum MainTabID {
   HOME,
-  WATER_PLAN,
   MINE
 }
 
-export const TabItemList: TabItem[] = [
+export const MainTabItemList: TabItem[] = [
   {
     icon:$r('app.media.home0'),
     icon_selected: $r('app.media.home1'),
     title: '主页',
-    id:TabID.HOME
+    id:MainTabID.HOME
 
   },
   {
   icon:$r('app.media.user0'),
   icon_selected: $r('app.media.user1'),
   title: '我的',
-  id:TabID.MINE },
+  id:MainTabID.MINE },
+]
+
+export enum FarmTabID {
+  INDOOR,
+  OUTDOOR
+}
+
+export const FarmIOTabList: TabItem[] = [
   {
-    icon:$r('app.media.water0'),
-    icon_selected: $r('app.media.water1'),
-    title: '灌溉计划',
-    id:TabID.WATER_PLAN
+    icon:$r('app.media.InDoor'),
+    icon_selected: $r('app.media.InDoor'),
+    title: '室内农田',
+    id:FarmTabID.INDOOR
+  },
+  {
+    icon:$r('app.media.OutDoor'),
+    icon_selected: $r('app.media.OutDoor'),
+    title: '室外农田',
+    id:FarmTabID.OUTDOOR
   }
-
-
 ]
