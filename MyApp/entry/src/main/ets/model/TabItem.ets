@@ -1,3 +1,4 @@
+//Tab格式
 export interface TabItem {
   icon:Resource;//图标
   icon_selected: Resource;
@@ -5,6 +6,8 @@ export interface TabItem {
   id: number;
 }
 
+
+//主界面tab转换列表
 export enum MainTabID {
   HOME,
   MINE
@@ -25,6 +28,8 @@ export const MainTabItemList: TabItem[] = [
   id:MainTabID.MINE },
 ]
 
+
+//主页农田室内室外转换tab
 export enum FarmTabID {
   INDOOR,
   OUTDOOR
@@ -42,5 +47,40 @@ export const FarmIOTabList: TabItem[] = [
     icon_selected: $r('app.media.OutDoor'),
     title: '室外农田',
     id:FarmTabID.OUTDOOR
+  }
+]
+
+//管理农田参数转换Tab
+export enum InDoorTabId {
+  WaterPump,//水泵
+  Ventilate,//通风
+  LightSub,//补光
+  SkyLight//天窗
+}
+
+export const InDoorTabList: TabItem[] = [
+  {
+    icon:$r('app.media.WaterPump'),
+    icon_selected: $r('app.media.WaterPump'),
+    title: '水泵',
+    id:InDoorTabId.WaterPump
+  },
+  {
+    icon:$r('app.media.Ventilate'),
+    icon_selected: $r('app.media.Ventilate'),
+    title: '通风',
+    id:InDoorTabId.Ventilate
+  },
+  {
+    icon:$r('app.media.LightSub'),
+    icon_selected: $r('app.media.LightSub'),
+    title: '补光',
+    id:InDoorTabId.LightSub
+  },
+  {
+    icon:$r('app.media.SkyLight'),
+    icon_selected: $r('app.media.SkyLight'),
+    title: '天窗',
+    id:InDoorTabId.SkyLight
   }
 ]

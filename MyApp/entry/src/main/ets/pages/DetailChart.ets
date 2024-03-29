@@ -3,6 +3,7 @@ import router from '@ohos.router'
 import {McLineChart, Options} from '@mcui/mccharts'
 import { WaterPlanComponent } from '../view/WaterPlanComponent'
 import {ChartItem, ChartItemList} from '../model/ChartItem'
+import { InDoorTabId, InDoorTabList } from '../model/TabItem'
 
 //显示该农田某一项数据具体信息及时间轴图标的页面
 @Entry
@@ -10,6 +11,7 @@ import {ChartItem, ChartItemList} from '../model/ChartItem'
 struct DetailChart {
   @State ChartItemShowList: boolean[] = [false, false, false, false, false]
   @State WaterPlanShow:boolean = false //是否显示灌溉计划的控制量
+  @State PageIndex: number = 0;//tab转换控制
 
   //测试用数据图标
   @State seriesOption: Options = new Options({
@@ -72,6 +74,18 @@ struct DetailChart {
     }
   }
 
+  @Builder MyTabBuilder(idx: number){
+    Column(){
+      Image(idx == this.PageIndex ? InDoorTabList[idx].icon_selected : InDoorTabList[idx].icon)
+        .width(32)
+        .height(32)
+      Text(InDoorTabList[idx].title)
+        .fontSize(14)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.PageIndex === idx ? '#006eee':'#888')
+    }
+  }
+
   //主体
   build() {
     Column() {
@@ -115,7 +129,34 @@ struct DetailChart {
       //灌溉计划的主体模块
       if(this.WaterPlanShow){
         Column(){
-          WaterPlanComponent()
+
+          Tabs({barPosition:BarPosition.Start}){
+            //灌溉
+            TabContent(){WaterPlanComponent()}
+            .tabBar(this.MyTabBuilder(InDoorTabId.WaterPump))
+
+            //通风
+            TabContent(){}
+            .tabBar(this.MyTabBuilder(InDoorTabId.Ventilate))
+
+            //补光
+            TabContent(){}
+            .tabBar(this.MyTabBuilder(InDoorTabId.LightSub))
+
+            //天窗
+            TabContent(){}
+            .tabBar(this.MyTabBuilder(InDoorTabId.SkyLight))
+          }
+          .barWidth('100%')
+          .barMode(BarMode.Fixed)
+          .width('100%')
+          .height('100%')
+          .onChange((index)=>{//绑定onChange函数切换页签
+            this.PageIndex = index;
+          })
+
+
+
         }
           .transition({ type: TransitionType.All, opacity: 0, translate: { x: 0, y: -200 } })
           .width('100%')
@@ -145,7 +186,7 @@ struct DetailChart {
         })
       }
       .height("70%")
-      .scrollBar(BarState.Auto)
+      .scrollBar(BarState.Auto)//滑动条
     }
     .width('100%')
     .height('100%')

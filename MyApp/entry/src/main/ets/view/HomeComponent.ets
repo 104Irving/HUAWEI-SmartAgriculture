@@ -7,7 +7,7 @@ import { FarmIOTabList, FarmTabID } from '../model/TabItem';
 @Component
 export default struct HomeComponent {
   UserInfo: UserInfoBean
-  @State PageIndex: number = 0;
+  @State PageIndex: number = 0;//tab转换控制
 
   //测试数据
   @State FarmList:FarmBean[] =
@@ -18,6 +18,7 @@ export default struct HomeComponent {
       new FarmBean(4, 'fufu的大米田', 22.5, 60, 30, 800, 25)]
   @State FarmDetailShow:boolean[] = [false, false, false, false,false]
 
+  //tab构造函数
   @Builder MyTabBuilder(idx: number){
     Column(){
       Image(idx == this.PageIndex ? FarmIOTabList[idx].icon_selected : FarmIOTabList[idx].icon)
@@ -55,11 +56,21 @@ export default struct HomeComponent {
     Column(){
       Divider()
         .width('95%')
-      Text('传感器数据')
-        .fontSize(24)
-        .fontWeight(FontWeight.Bold)
-        .fontColor(Color.Orange)
-        .margin({ top: 10 })
+      Row(){
+        Image($r('app.media.Senser'))
+          .width(40)
+          .height(40)
+          .margin(10)
+          .position({ x: "-15%", y:"20%" })
+        Text('传感器数据')
+          .fontSize(24)
+          .fontWeight(FontWeight.Bold)
+          .fontColor(Color.Black)
+          .margin({ top: 10 })
+      }
+      .height("7%")
+
+
       Divider()
         .width('95%')
 
@@ -98,12 +109,12 @@ export default struct HomeComponent {
           Text(name)
             .fontSize(20)
 
-          Image($r('app.media.water0'))
+          Image($r('app.media.Arrow'))
             .width(40)
             .height(40)
             .margin(10)
-            .position({ x: "80%" })
-            .rotate({angle:this.FarmDetailShow[index]?0:270})
+            .position({ x: "80%", y:"1%" })
+            .rotate({angle:this.FarmDetailShow[index]?90:0})
         }.align(Alignment.TopStart)
       }
       .width('100%')
@@ -163,23 +174,6 @@ export default struct HomeComponent {
         this.PageIndex = index;
       })
 
-      //显示农田列表
-      // List({space: 8}) {
-      //   ForEach(this.FarmDetailShow, (FarmShow:boolean, index:number) => {
-      //     ListItem() {
-      //       this.FarmListItem(this.FarmList[index].name, this.FarmList[index].fieldId)
-      //     }
-      //     // .opacity(0.7)//透明度选项
-      //     .onClick(()=>{
-      //       animateTo({
-      //         duration: 650,
-      //         curve: Curve.Smooth },
-      //         () => {this.FarmDetailShow[index] = !this.FarmDetailShow[index]})
-      //     })
-      //   })
-      // }
-      // .height('100%')
-      // .listDirection(Axis.Vertical) //列表垂直方向布局
     }
     .width('100%')
     .height('100%')
