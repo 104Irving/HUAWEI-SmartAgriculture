@@ -98,7 +98,7 @@ inline void InitMoist(){
 /*调试代码(输出数据,检测数据发送是否成功.etc)*/
 inline void Test(esp_err_t *result){
   /*检测数据发送是否成功*/
-  if (result == ESP_OK) {
+  if (*result == ESP_OK) {
     Serial.println("Sent with success");
   }
   else {
