@@ -45,7 +45,9 @@ const int VoltagePin=34;       //电池电压针脚
 const int NumRead=5;           //采样数量
 int MoistRead[NumRead];        //存储样本
 int Point=0;                   //指示目前最新数据
-unsigned long long TimeStamp;  //时间戳,用于控制灌溉时间
+
+//时间戳,用于控制灌溉时间
+unsigned long long TimeStamp=0;
 
 //数据接收回调函数
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
