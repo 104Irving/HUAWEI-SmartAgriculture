@@ -4,6 +4,7 @@
  *管理室外水泵      *
  *Ciallo :)        *
  *******************/
+//水泵控制重构,解决第一次启动的问题(待验证)
 #include <WiFi.h>
 #include <esp_now.h>
 
@@ -24,7 +25,8 @@ typedef struct EspNowDataReceive{
     int State;                   //水泵操作模式 0->由单片机自主控制;1->手动控制;2->计划
     int Switch;                  //水泵开关 0->关闭;1->开启
     int Time;                    //单次灌溉时长,默认为3s
-    int Interval;                //计划操作时,间隔时间(单位:ms)
+    unsigned long long Interval; //计划操作时,间隔时间(单位:ms)
+    unsigned long long StartTime;//第一次启动前时间差
   };
   bump Bump;
 } EspNowDataReceive;
@@ -32,9 +34,6 @@ EspNowDataReceive ReceiveData;
 
 //接收设备的MAC地址
 uint8_t ReceiverAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x2C, 0xE0};
-
-//比对以判断水泵状态是否改变
-int cmp=3;
 
 //I/O端口
 const int BumpPin=0;           //水泵针脚
@@ -46,8 +45,12 @@ const int NumRead=5;           //采样数量
 int MoistRead[NumRead];        //存储样本
 int Point=0;                   //指示目前最新数据
 
-//时间戳,用于控制灌溉时间
+//时间戳,用于控制灌溉时间及计算第一次开启时间差
 unsigned long long TimeStamp=0;
+unsigned long long TimeStartInterval=-1;
+
+//比对以判断水泵状态是否改变
+int cmp=3;
 
 //数据接收回调函数
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
@@ -235,6 +238,17 @@ void loop() {
       //计算时间戳并决定是否浇水
       if(!TimeStamp){
         TimeStamp=millis();
+        TimeStartInterval=ReceiveData.Bump.StartTime;
+      }
+      if(TimeStartInterval){
+        if(millis()-TimeStamp>TimeStartInterval){
+          TimeStamp=millis();
+          digitalWrite(BumpPin,HIGH);
+          while(millis()-TimeStamp<ReceiveData.Bump.Time);
+          digitalWrite(BumpPin,LOW);
+          TimeStamp=millis();
+          TimeStartInterval=0;
+        }
       }
       if(millis()-TimeStamp>ReceiveData.Bump.Interval){
         TimeStamp=millis();
