@@ -2,7 +2,7 @@ import UserInfoBean from '../Common/Bean/UserInfoBean';
 import { MainTabID, MainTabItemList } from '../model/TabItem';
 import HomeComponent from '../view/HomeComponent';
 import { MineComponent } from '../view/MineComponent';
-import { WaterPlanComponent } from '../view/WaterPlanComponent';
+import { WaterPlanComponent } from '../view/OperationPlanComponent';
 
 @Entry
 @Component

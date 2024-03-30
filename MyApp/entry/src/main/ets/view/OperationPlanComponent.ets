@@ -1,8 +1,70 @@
+enum TimeTable {
+  ZERO, ONE, TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,ELEVEN,TWELVE
+}
+
+//弹窗
+// @CustomDialog
+// struct CustomDialogExample {
+//   @State Hour:string = ''
+//   controller: CustomDialogController
+//   cancel: () => void
+//   confirm: () => void
+//   build() {
+//     Column() {
+//       Text('我是内容').fontSize(20).margin({ top: 10, bottom: 10 })
+//       Flex({ justifyContent: FlexAlign.SpaceAround }) {
+//         Button('cancel')
+//           .onClick(() => {
+//             this.controller.close()
+//             this.cancel()
+//           }).backgroundColor(0xffffff).fontColor(Color.Black)
+//         Button('confirm')
+//           .onClick(() => {
+//             this.controller.close()
+//             this.confirm()
+//           }).backgroundColor(0xffffff).fontColor(Color.Red)
+//       }.margin({ bottom: 10 })
+//     }
+//   }
+// }
 
 @Component
 export struct WaterPlanComponent {
+  @State selectTime: Date = new Date('2020-12-25T08:30:00')
+  // dialogController: CustomDialogController = new CustomDialogController({
+  //   builder: CustomDialogExample({
+  //     cancel: this.onCancel,
+  //     confirm: this.onAccept,
+  //   }),
+  //   alignment: DialogAlignment.Default,  // 可设置dialog的对齐方式，设定显示在底部或中间等，默认为底部显示
+  // })
+  // onCancel() {
+  //   console.log('Callback when the first button is clicked')
+  // }
+  // onAccept() {
+  //   console.log('Callback when the second button is clicked')
+  // }
+
   build() {
     Column({space:8}) {
+      // Button("TimePickerDialog 24小时制")
+      //   .margin(20)
+      //   .onClick(() => {
+      //     TimePickerDialog.show({
+      //       selected: this.selectTime,
+      //       useMilitaryTime: true,
+      //       onAccept: (value: TimePickerResult) => {
+      //         this.selectTime.setHours(value.hour, value.minute)
+      //         console.info("TimePickerDialog:onAccept()" + JSON.stringify(value))
+      //       },
+      //       onCancel: () => {
+      //         console.info("TimePickerDialog:onCancel()")
+      //       },
+      //       onChange: (value: TimePickerResult) => {
+      //         console.info("TimePickerDialog:onChange()" + JSON.stringify(value))
+      //       }
+      //     })
+      //   })
 
       Text('手动灌溉')
         .fontSize(24)
@@ -15,7 +77,6 @@ export struct WaterPlanComponent {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
-
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
@@ -49,10 +110,20 @@ export struct WaterPlanComponent {
         Text('开始时间:')
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
-        Row(){Text('9:30')}
+        Row(){Text(`${this.selectTime.getHours()}:${this.selectTime.getMinutes()}`)}
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
+      .onClick(() => {
+        TimePickerDialog.show({
+          selected: this.selectTime,
+          useMilitaryTime: true,
+          onAccept: (value: TimePickerResult) => {
+            this.selectTime.setHours(value.hour, value.minute)
+          }
+        })
+      })
+
       Row(){
         Text('持续时间:')
           .fontSize(22)
