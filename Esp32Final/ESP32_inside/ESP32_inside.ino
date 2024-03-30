@@ -39,6 +39,7 @@ typedef struct EspNowDataReceive{
     int Switch;                  //水泵开关(仅手动控制状态使用) 0->关闭;1->开启
     int Time;                    //单次灌溉时长
     int Interval;                //计划操作时,间隔时间(单位:ms)
+
   };
   struct fan{
     int State;                   //风扇操作模式 0->由单片机自主控制;1—>手动控制;2->计划
@@ -47,10 +48,9 @@ typedef struct EspNowDataReceive{
     int Interval;                //计划操作时,间隔时间(单位:ms)
   };
   struct led{
-    int State;                   //LED操作模式 0->由单片机自主控制;1->手动控制;2->计划
+    int State;                   //LED操作模式 0->基于光强进行控制;1->手动控制
     int Switch;                  //LED开关(仅手动控制状态使用) 0->关闭;1->开启
-    int Time;                    //单次开启时长
-    int Interval;                //计划操作时,间隔时间(单位:ms)               
+    int Condition;               //设定的开启标准(低于该值时开启)
   };
   struct window{
     int State;                   //天窗操作模式 1->由单片机自主控制;1->手动控制;2->计划
@@ -73,6 +73,7 @@ const int DHT_Pin=11;          //DHT传感器针脚
 const int FlumePin=19;         //培养槽水位传感器针脚
 const int TankPin=41;          //水箱水位传感器
 const int BumpPin=59;          //水泵针脚
+const int LED_Pin=18;          //LED针脚
 
 //声明DHT传感器对象
 SimpleDHT11 dht11(DHT_Pin);
@@ -145,9 +146,10 @@ inline void EspNowConnect(){
 
 //初始化端口
 inline void Init(){
-  pinMode(FlumePin,INPUT);
-  pinMode(TankPin,INPUT);
-  pinMode(BumpPin,OUTPUT);
+  pinMode(FlumePin,INPUT);     //水槽水位传感器
+  pinMode(TankPin,INPUT);      //水箱水位传感器
+  pinMode(BumpPin,OUTPUT);     //水泵端口
+  pinMode(LED_Pin,OUTPUT);     //LED端口
 }
 
 void setup() {
@@ -231,6 +233,30 @@ void Task0code(void * pvParameters){
         Bump.TimeStamp=millis();
       }
       Bump.cmp=3;
+    break;
+  }
+
+/*LED控制*/
+  switch(ReceiveData.LED.State){
+  /*基于光强开启*/
+  case 0:
+    //光强低于设定值时开启LED
+    if(SendData.LightIntensity<ReceiveData.LED.Condition){
+      digitalWrite(LED_Pin,HIGH);
+    }
+    else{
+      digitalWrite(LED_Pin,LOW);
+    }
+    break;
+  /*手动控制*/  
+  case 1:
+    if(ReceiveData.LED.Switch){
+      digitalWrite(LED_Pin,HIGH);
+    }
+    else{
+      digitalWrite(LED_Pin,LOW);
+    }
+    delay(10);
     break;
   }
 }
