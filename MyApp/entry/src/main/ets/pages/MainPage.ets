@@ -45,6 +45,7 @@ struct MainPage {
     })
   }
 
+  //页面转换
   pageTransition(){
     PageTransitionEnter({ duration: 600 })
       .opacity(0)

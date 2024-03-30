@@ -1,9 +1,11 @@
+//数据格式
 export interface ChartItem{
-  ItemName:string
-  //需要变量的数据表,需要联网获得
-  Image:any
+  ItemName:string //数据名
+  //需要变量的数据表,需要联网获得 todo
+  Image:Resource //数据的图标
 }
 
+//展示数据的列表
 export const ChartItemList: ChartItem[] = [
   {
     ItemName:'温度',
