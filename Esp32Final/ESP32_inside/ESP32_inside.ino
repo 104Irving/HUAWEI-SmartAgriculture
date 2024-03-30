@@ -4,6 +4,7 @@
  *水泵、风扇、天窗、LED   *
  *我想吃掉你的胰脏        *
  ************************/
+//风扇与天窗待完成,缺少控制逻辑
 #include <Wire.h>
 #include <WiFi.h>
 #include <esp_now.h>
@@ -38,8 +39,8 @@ typedef struct EspNowDataReceive{
     int State;                   //水泵操作模式 0->由单片机自主控制;1->手动控制;2->计划
     int Switch;                  //水泵开关(仅手动控制状态使用) 0->关闭;1->开启
     int Time;                    //单次灌溉时长
-    int Interval;                //计划操作时,间隔时间(单位:ms)
-
+    unsigned long long Interval; //计划操作时,间隔时间(单位:ms)
+    unsigned long long StartTime;//第一次启动前时间差
   };
   struct fan{
     int State;                   //风扇操作模式 0->由单片机自主控制;1—>手动控制;2->计划
@@ -90,8 +91,9 @@ byte humidity = 0;
 typedef struct bump{
   int cmp;
   unsigned long long TimeStamp;
+  unsigned long long TimeStartInterval;
 }bump;
-bump Bump={3,0};
+bump Bump={3,0,-1};
 
 //数据接收回调函数
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
@@ -224,6 +226,18 @@ void Task0code(void * pvParameters){
       //计算时间戳并决定是否浇水
       if(!Bump.TimeStamp){
         Bump.TimeStamp=millis();
+        Bump.TimeStartInterval=ReceiveData.Bump.StartTime;
+      }
+      if(Bump.TimeStartInterval){
+        if(millis()-Bump.TimeStamp>Bump.TimeStartInterval){
+          Bump.TimeStamp=millis();
+          digitalWrite(BumpPin,HIGH);
+          while(millis()-Bump.TimeStamp<ReceiveData.Bump.Time);
+          digitalWrite(BumpPin,LOW);
+          Bump.TimeStamp=millis();
+          Bump.TimeStartInterval=0;
+        }
+        else break;
       }
       if(millis()-Bump.TimeStamp>ReceiveData.Bump.Interval){
         Bump.TimeStamp=millis();
@@ -247,6 +261,7 @@ void Task0code(void * pvParameters){
     else{
       digitalWrite(LED_Pin,LOW);
     }
+    delay(10);
     break;
   /*手动控制*/  
   case 1:
