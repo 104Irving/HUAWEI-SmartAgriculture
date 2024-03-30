@@ -11,7 +11,7 @@ float b = 0;
 float c = 0;
 */
 
-int Value = analogRead(analogPin)+8;
+int Value = analogRead(analogPin);
 
 void setup(){
 
@@ -23,8 +23,8 @@ void loop(){
   Filter_Value = Filter();
   Value = Filter_Value;
   x = Filter_Value;
-  //x = analogRead(analogPin);  //读取电压ADC原始值
-
+  
+  x = x + 8;
   if((x-880)<5||(880-x)<5)
   x = 880;
   //满电补偿
@@ -47,11 +47,17 @@ void loop(){
   Serial.print("电压：");
   Serial.print(vol);
   Serial.println("v");
-  //Serial.println(x);
+ 
   Serial.print("电量：");
   Serial.print(battery);
   Serial.println("％");
+
+  Serial.print("原始值：");
   Serial.println(analogRead(analogPin));
+  Serial.print("滤波值：");
+  Serial.println(Filter_Value);
+  Serial.print("校正值：");
+  Serial.println(vol/3.3/5*4096);
   delay(1000);
 
 }
@@ -59,7 +65,7 @@ void loop(){
 #define FILTER_A 2  //阈值
 int Filter(){
   int NewValue;
-  NewValue = analogRead(analogPin)+8;
+  NewValue = analogRead(analogPin);
   if(((NewValue-Value)>FILTER_A)||(Value-NewValue)>FILTER_A)
   return Value;
   else
