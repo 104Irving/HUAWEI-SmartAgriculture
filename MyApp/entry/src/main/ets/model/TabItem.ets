@@ -55,7 +55,6 @@ export enum InDoorTabId {
   WaterPump,//水泵
   Ventilate,//通风
   LightSub,//补光
-  SkyLight//天窗
 }
 
 export const InDoorTabList: TabItem[] = [
@@ -76,11 +75,5 @@ export const InDoorTabList: TabItem[] = [
     icon_selected: $r('app.media.LightSub'),
     title: '补光',
     id:InDoorTabId.LightSub
-  },
-  {
-    icon:$r('app.media.SkyLight'),
-    icon_selected: $r('app.media.SkyLight'),
-    title: '天窗',
-    id:InDoorTabId.SkyLight
   }
 ]

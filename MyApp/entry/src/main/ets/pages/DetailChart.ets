@@ -1,9 +1,11 @@
 
 import router from '@ohos.router'
 import {McLineChart, Options} from '@mcui/mccharts'
-import { WaterPlanComponent } from '../view/WaterPlanComponent'
+import { VentilatePlanComponent, WaterPlanComponent } from '../view/OperationPlanComponent'
 import {ChartItem, ChartItemList} from '../model/ChartItem'
 import { InDoorTabId, InDoorTabList } from '../model/TabItem'
+
+
 
 //显示该农田某一项数据具体信息及时间轴图标的页面
 @Entry
@@ -121,9 +123,7 @@ struct DetailChart {
           .transition({ type: TransitionType.All, opacity: 0})
           .onClick(()=>{
             animateTo({ duration: 200, curve: Curve.Smooth},
-              () => {
-                this.OperationShow = !this.OperationShow
-              })
+              () => {this.OperationShow = !this.OperationShow})
           })
       }
 
@@ -137,16 +137,12 @@ struct DetailChart {
             .tabBar(this.MyTabBuilder(InDoorTabId.WaterPump))
 
             //通风
-            TabContent(){}
+            TabContent(){VentilatePlanComponent()}
             .tabBar(this.MyTabBuilder(InDoorTabId.Ventilate))
 
             //补光
             TabContent(){}
             .tabBar(this.MyTabBuilder(InDoorTabId.LightSub))
-
-            //天窗
-            TabContent(){}
-            .tabBar(this.MyTabBuilder(InDoorTabId.SkyLight))
           }
           .barWidth('100%')
           .barMode(BarMode.Fixed)
