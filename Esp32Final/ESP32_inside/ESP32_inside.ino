@@ -1,12 +1,13 @@
-/*************************
- *室内1区                *
- *温湿度、光强、水箱水位  *
- *水泵、风扇、天窗、LED   *
- *我想吃掉你的胰脏        *
- ************************/
+/***********************************
+ *室内1区                          *
+ *温湿度、光强、水箱水位、培养槽水位  *
+ *水泵、风扇、天窗、LED              *
+ *我想吃掉你的胰脏                   *
+ ************************************/
 //风扇与天窗待完成,缺少控制逻辑
 #include <Wire.h>
 #include <WiFi.h>
+#include <ESP32Servo.h>
 #include <esp_now.h>
 #include <SimpleDHT.h>
 
@@ -42,32 +43,30 @@ typedef struct EspNowDataReceive{
     unsigned long long Interval; //计划操作时,间隔时间(单位:ms)
     unsigned long long StartTime;//第一次启动前时间差
   };
-  struct fan{
-    int State;                   //风扇操作模式 0->由单片机自主控制;1—>手动控制;2->计划
-    int Switch;                  //风扇开关(仅手动控制状态使用) 0->关闭;1—>开启
-    int Time;                    //单次开启时长
-    int Interval;                //计划操作时,间隔时间(单位:ms)
-  };
   struct led{
     int State;                   //LED操作模式 0->基于光强进行控制;1->手动控制
     int Switch;                  //LED开关(仅手动控制状态使用) 0->关闭;1->开启
     int Condition;               //设定的开启标准(低于该值时开启)
   };
+  struct fan{
+    int State;                   //风扇操作模式 0->基于温度进行控制;1—>手动控制
+    int Switch;                  //风扇开关(仅手动控制状态使用) 0->关闭;1—>开启
+    int Temperature;             //设定的开启标准(高于此值时开启)
+  };
   struct window{
-    int State;                   //天窗操作模式 1->由单片机自主控制;1->手动控制;2->计划
+    int State;                   //天窗操作模式 1->基于温度进行控制;1->手动控制
     int Switch;                  //天窗开关(仅手动控制状态使用) 0->关闭;1->开启
-    int Time;                    //单次开启时长
-    int Interval;                //计划操作时,间隔时间(单位:ms)
+    int Temperature;             //设定的开启标准(高于此值时开启)
   };
   bump Bump;
-  fan Fan;
   led LED;
   window Window;
+  fan Fan;
 } EspNowDataReceive;
 EspNowDataReceive ReceiveData;
 
 //接收设备的MAC地址
-uint8_t ReceiverAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x2C, 0xE0};
+uint8_t ReceiverAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x44, 0x28};
 
 //I/O端口
 const int DHT_Pin=11;          //DHT传感器针脚
@@ -75,9 +74,14 @@ const int FlumePin=19;         //培养槽水位传感器针脚
 const int TankPin=41;          //水箱水位传感器
 const int BumpPin=59;          //水泵针脚
 const int LED_Pin=18;          //LED针脚
+const int WindowPin=41;        //天窗控制(舵机) 175->OFF;70->ON
+const int FanPin=0;            //风扇针脚
 
 //声明DHT传感器对象
 SimpleDHT11 dht11(DHT_Pin);
+
+//声明舵机对象
+Servo myServo;
 
 //I2C高低位数据位
 byte HighByte = 0;
@@ -94,6 +98,20 @@ typedef struct bump{
   unsigned long long TimeStartInterval;
 }bump;
 bump Bump={3,0,-1};
+
+//天窗(舵机)控制的相关变量(默认关闭)
+typedef struct window{
+  int AngleNow;                //舵机目前所处的角度
+  int AngleSet;                //设定的角度
+} window;
+window Window={175,175};
+
+//风扇控制的相关变量(默认关闭)
+typedef struct fan{
+  int Now;                     //风扇目前状态
+  int Set;                     //设定的角度
+} fan;
+fan Fan={0,0};
 
 //数据接收回调函数
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
@@ -152,6 +170,9 @@ inline void Init(){
   pinMode(TankPin,INPUT);      //水箱水位传感器
   pinMode(BumpPin,OUTPUT);     //水泵端口
   pinMode(LED_Pin,OUTPUT);     //LED端口
+  pinMode(FanPin,OUTPUT);      //风扇端口
+  myServo.attach(WindowPin);   //天窗端口(舵机)
+  myServo.write(175);          //将天窗关闭
 }
 
 void setup() {
@@ -272,6 +293,79 @@ void Task0code(void * pvParameters){
       digitalWrite(LED_Pin,LOW);
     }
     delay(10);
+    break;
+  }
+
+/*天窗(舵机)控制*/
+  switch(ReceiveData.Window.State){
+  /*基于温度开启*/
+  case 0:
+    //不低于设定温度时开启
+    if(SendData.Temperature>=ReceiveData.Window.Temperature){
+      Window.AngleSet=70;
+      if(Window.AngleNow>Window.AngleSet){
+        Window.AngleNow--;
+        myServo.write(Window.AngleNow);
+      }
+    }
+    else{
+      Window.AngleSet=175;
+      if(Window.AngleNow<Window.AngleSet){
+        Window.AngleNow++;
+        myServo.write(Window.AngleNow);
+      }
+    }
+    break;
+  /*手动控制*/
+  case 1:
+    //天窗开
+    if(ReceiveData.Window.Switch){
+      Window.AngleSet=70;
+      if(Window.AngleNow>Window.AngleSet){
+        Window.AngleNow--;
+        myServo.write(Window.AngleNow);
+      }
+    }
+    //天窗关
+    else{
+      Window.AngleSet=175;
+      if(Window.AngleNow<Window.AngleSet){
+        Window.AngleNow++;
+        myServo.write(Window.AngleNow);
+      }
+    }
+    break;
+  }
+
+/*风扇控制*/
+  switch(ReceiveData.Fan.State){
+  /*基于温度开启*/
+  case 0:
+    //不低于设定温度时开启
+    if(SendData.Temperature>=ReceiveData.Fan.Temperature){
+      Fan.Set=1;
+      if(Fan.Set!=Fan.Now){
+        Fan.Now=1;
+        digitalWrite(FanPin,HIGH);
+      }
+    }
+    else{
+      Fan.Set=0;
+      if(Fan.Set!=Fan.Now){
+        Fan.Now=0;
+        digitalWrite(FanPin,LOW);
+      }
+    }
+    break;
+  /*手动控制*/
+  case 1:
+    //风扇开
+    if(ReceiveData.Fan.Switch){
+      digitalWrite(FanPin,HIGH);
+    }
+    else{
+      digitalWrite(FanPin,LOW);
+    }
     break;
   }
 }

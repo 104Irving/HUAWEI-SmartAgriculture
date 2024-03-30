@@ -33,7 +33,7 @@ typedef struct EspNowDataReceive{
 EspNowDataReceive ReceiveData;
 
 //接收设备的MAC地址
-uint8_t ReceiverAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x2C, 0xE0};
+uint8_t ReceiverAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x44, 0x28};
 
 //I/O端口
 const int BumpPin=0;           //水泵针脚

@@ -28,7 +28,7 @@ typedef struct EspNowDataSend{
 EspNowDataSend SendData;
 
 //接收设备的MAC地址
-uint8_t ReceiverAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x2C, 0xE0};
+uint8_t ReceiverAddress[] = {0x08, 0xD1, 0xF9, 0xE7, 0x44, 0x28};
 
 //声明Aht20&Bmp20
 Adafruit_AHTX0 aht;
