@@ -249,6 +249,7 @@ void loop() {
           TimeStamp=millis();
           TimeStartInterval=0;
         }
+        else break;
       }
       if(millis()-TimeStamp>ReceiveData.Bump.Interval){
         TimeStamp=millis();
