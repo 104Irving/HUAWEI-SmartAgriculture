@@ -1,3 +1,5 @@
+//接5V！！！
+
 int Value = 0;
 int Max_Value = 2000;
 int Min_Value = 1000;
@@ -11,6 +13,14 @@ void setup() {
 
 void loop() {
   Value = analogRead(35);
+  if(Value>3000){
+    Serial.println("高水位");
+  }else if(Value >= 2300 && Value <= 3000){
+     Serial.println("中水位");
+  }else{
+     Serial.println("低水位");
+  }
+  /*
   int x = Value;
   if(Value>Max_Value){
     Serial.println("Hi");
@@ -25,7 +35,7 @@ void loop() {
   else{
     Serial.println("Lo");
   }
-
+*/
   //Serial.println(analogRead(34));
   Serial.println(Value);
 

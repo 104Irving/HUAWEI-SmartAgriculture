@@ -1,5 +1,5 @@
-import router from '@ohos.router'
-import axios from '@ohos/axios'
+import router from '@ohos.router';
+import axios from "@ohos/axios";
 
 @Entry
 @Component
@@ -9,6 +9,7 @@ struct Index {
 
   build() {
     Flex({direction:FlexDirection.Column,alignItems:ItemAlign.Center,justifyContent:FlexAlign.SpaceAround}){
+
       Text('农业灌溉登入端')
         .fontSize(24)
         .fontColor(0xCC6CE7)
@@ -28,22 +29,21 @@ struct Index {
         .width('95%') .margin({top:10})
         .onClick(() =>{
           axios({
+            method:"get",
             url:'http://localhost:8080/login',
             params:{
               userName:this.username,
               userPassword:this.password
             }
           }).then(res=>{
-            if(res.data===true){
-              console.info("噶尼玛的，"+this.username+"进去了！")
+            if(res.data){
               router.pushUrl({
-                url:'pages/LoadingPage'
+                url:'pages/LoadingPage',
+                //还需要式北来写全局变量更新：username,password
               })
             }else{
-              console.info("噶尼玛的，输错了")
+              //还需要式北来写没成功登陆的界面
             }
-          }).catch(error => {
-            console.error(error);
           })
         })
       Button('注册') .width('95%')
@@ -54,6 +54,13 @@ struct Index {
     }
     .width('100%')
     .height('100%')
+  }
 
+  //页面切换
+  pageTransition(){
+    PageTransitionEnter({ duration: 600 })
+      .opacity(0)
+    PageTransitionExit({ duration: 600 })
+      .opacity(0)
   }
 }
