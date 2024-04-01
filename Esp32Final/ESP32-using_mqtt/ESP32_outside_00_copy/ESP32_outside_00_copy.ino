@@ -42,11 +42,11 @@ const int mqtt_port=1883;                                      //端口
 const char Topic[9][40]={"Data/Outside/SoilMoisture",          //0:土壤湿度
                          "Data/Outside/Voltage",               //1:电池电压
                          "Data/Outside/BatteryLevel",          //2:电池电量
-                         "Control/Outside/Bump/State",         //3:室外水泵控制模式
-                         "Control/Outside/Bump/Switch",        //4:室外水泵开关
-                         "Control/Outside/Bump/Time",          //5:室外水泵单次灌溉时长
-                         "Control/Outside/Bump/Interval",      //6:室外水泵灌溉间隔
-                         "Control/Outside/Bump/StartTime",     //7:室外水泵第一次启动时间差
+                         "Control/Out/Bump/State",         //3:室外水泵控制模式
+                         "Control/Out/Bump/Switch",        //4:室外水泵开关
+                         "Control/Out/Bump/Time",          //5:室外水泵单次灌溉时长
+                         "Control/Out/Bump/Interval",      //6:室外水泵灌溉间隔
+                         "Control/Out/Bump/StartTime",     //7:室外水泵第一次启动时间差
                          "Data/Inside/WaterTank"};             //8:水箱水位
 const char *mqtt_username="ESP32_00";                          //用户名
 const char *mqtt_password="a12345678";                         //密码
@@ -265,12 +265,12 @@ inline void DataPublish(){
   sprintf(Buff,"SoilMoisture:%d",SendData.SoilMoisture);
   client.publish(Topic[0],Buff);
 
-  //室外空气湿度
+  //电池电压
   sprintf(Buff,"Voltage:%lf",SendData.Voltage);
   client.publish(Topic[1],Buff);
 
-  //降雨
-  sprintf(Buff,"BatteryLevel:%d",SendData.BatteryLevel);
+  //电池电量
+  sprintf(Buff,"BatteryLevel:%lf",SendData.BatteryLevel);
   client.publish(Topic[2],Buff);
 }
 

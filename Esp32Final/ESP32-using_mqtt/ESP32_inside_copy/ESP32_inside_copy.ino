@@ -76,20 +76,20 @@ const char Topic[19][40]={"Data/Inside/LightIntensity",       //0:光强
                           "Data/Inside/AirHumidity",           //2:室内湿度
                           "Data/Inside/WaterTank",             //3:水箱水位
                           "Data/Inside/Flume",                 //4:培养槽水位
-                          "Control/Inside/Bump/State",         //5:室内水泵控制模式
-                          "Control/Inside/Bump/Switch",        //6:室内水泵开关
-                          "Control/Inside/Bump/Time",          //7:室内水泵单次灌溉时长
-                          "Control/Inside/Bump/Interval",      //8:室内水泵灌溉间隔
-                          "Control/Inside/Bump/StartTime",     //9:室内水泵第一次开启时间
-                          "Control/Inside/LED/State",          //10:室内LED控制模式
-                          "Control/Inside/LED/Switch",         //11:室内LED开关
-                          "Control/Inside/LED/Condition",      //12:室内LED开启条件
-                          "Control/Inside/Window/State",       //13:室内天窗控制模式
-                          "Control/Inside/Window/Switch",      //14:室内天窗开关
-                          "Control/Inside/Window/Temperature", //15:室内天窗开启条件
-                          "Control/Inside/Fan/State",          //16:室内风扇控制模式
-                          "Control/Inside/Fan/Switch",         //17:室内风扇开关
-                          "Control/Inside/Fan/Temperature"};   //18:室内风扇开启条件
+                          "Control/In/Bump/State",         //5:室内水泵控制模式
+                          "Control/In/Bump/Switch",        //6:室内水泵开关
+                          "Control/In/Bump/Time",          //7:室内水泵单次灌溉时长
+                          "Control/In/Bump/Interval",      //8:室内水泵灌溉间隔
+                          "Control/In/Bump/StartTime",     //9:室内水泵第一次开启时间
+                          "Control/In/LED/State",          //10:室内LED控制模式
+                          "Control/In/LED/Switch",         //11:室内LED开关
+                          "Control/In/LED/Condition",      //12:室内LED开启条件
+                          "Control/In/Window/State",       //13:室内天窗控制模式
+                          "Control/In/Window/Switch",      //14:室内天窗开关
+                          "Control/In/Window/Temperature", //15:室内天窗开启条件
+                          "Control/In/Fan/State",          //16:室内风扇控制模式
+                          "Control/In/Fan/Switch",         //17:室内风扇开关
+                          "Control/In/Fan/Temperature"};   //18:室内风扇开启条件
 const char *mqtt_username="ESP32_02";                         //用户名
 const char *mqtt_password="a12345678";                        //密码
 char Buff[50];                                                //发送的消息
