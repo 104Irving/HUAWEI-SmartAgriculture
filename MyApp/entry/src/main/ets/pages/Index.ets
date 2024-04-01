@@ -1,4 +1,6 @@
 import router from '@ohos.router'
+import axios from '@ohos/axios'
+
 @Entry
 @Component
 struct Index {
@@ -25,8 +27,23 @@ struct Index {
       Button('登陆')
         .width('95%') .margin({top:10})
         .onClick(() =>{
-          router.pushUrl({
-            url : 'pages/LoadingPage'
+          axios({
+            url:'http://localhost:8080/login',
+            params:{
+              userName:this.username,
+              userPassword:this.password
+            }
+          }).then(res=>{
+            if(res.data===true){
+              console.info("噶尼玛的，"+this.username+"进去了！")
+              router.pushUrl({
+                url:'pages/LoadingPage'
+              })
+            }else{
+              console.info("噶尼玛的，输错了")
+            }
+          }).catch(error => {
+            console.error(error);
           })
         })
       Button('注册') .width('95%')
