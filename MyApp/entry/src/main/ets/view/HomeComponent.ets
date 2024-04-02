@@ -7,8 +7,8 @@ import { FarmIOTabList, FarmTabID } from '../model/TabItem';
 @Component
 export default struct HomeComponent {
   UserInfo: UserInfoBean
+  MyFarmList:FarmBean[]//农田的列表,
   @State PageIndex: number = 0;//tab转换控制
-
   //测试数据
   @State FarmList:FarmBean[] =
     [ new FarmBean(0, '一号田', 22.5, 56, 30, 800, 25),
@@ -119,7 +119,7 @@ export default struct HomeComponent {
       //点击后显示具体数据
       Row(){
         if(this.FarmDetailShow[index]==true){
-          this.DetailShow(this.FarmList[index])
+          this.DetailShow(this.MyFarmList[index])
         }
       }
       .opacity(this.FarmDetailShow[index]?0.9:0)
@@ -132,7 +132,7 @@ export default struct HomeComponent {
       ForEach(this.FarmDetailShow, (FarmShow:boolean, index:number) => {
         //FarmShow不能删除,删除会不能预览
         ListItem() {
-          this.FarmListItem(this.FarmList[index].name, this.FarmList[index].fieldId)
+          this.FarmListItem(this.MyFarmList[index].name, this.MyFarmList[index].fieldID)
         }
         // .opacity(0.7)//透明度选项
         .onClick(()=>{

@@ -2,8 +2,9 @@ import router from '@ohos.router'
 import axios from '@ohos/axios'
 
 const Params = router.getParams()
-const userName = Params['userName']
-const userPassword = Params['userPassword']
+
+let userName = Params['userName']
+let userPassword = Params['userPassword']
 
 @Entry
 @Component
@@ -11,9 +12,9 @@ struct LoadingPage{
   @State message: string = '少女祈祷中......'
 
   aboutToAppear(){
-    axios({
+    axios({//传递到服务器请求用户登录和相关数据
       method:"get",
-      url:'http://47.108.250.206:8080/login',
+      url:'47.108.250.206:8080/login',
       params:{
         userName:userName,
         userPassword:userPassword

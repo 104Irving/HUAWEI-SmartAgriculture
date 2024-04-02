@@ -4,7 +4,7 @@ import router from '@ohos.router';
 
 @Component
 export struct MineComponent {
-  @State user: UserInfoBean = new UserInfoBean("傻FUFU","fufu",[]);
+  @State user: UserInfoBean = new UserInfoBean("傻FUFU",0,[]);
   @State signature: string = '是歌姬吧';//签名
 
   build(){
