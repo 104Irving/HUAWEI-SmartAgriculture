@@ -28,23 +28,31 @@ struct Index {
       Button('登陆')
         .width('95%') .margin({top:10})
         .onClick(() =>{
-          axios({
-            method:"get",
-            url:'http://localhost:8080/login',
+          router.pushUrl({
+            url:'pages/LoadingPage',
+            //还需要式北来写全局变量更新：username,password
             params:{
-              userName:this.username,
-              userPassword:this.password
-            }
-          }).then(res=>{
-            if(res.data){
-              router.pushUrl({
-                url:'pages/LoadingPage',
-                //还需要式北来写全局变量更新：username,password
-              })
-            }else{
-              //还需要式北来写没成功登陆的界面
+              'userName':this.username,
+              'userPassword':this.password
             }
           })
+          // axios({
+          //   method:"get",
+          //   url:'http://47.108.250.206:8080/login',
+          //   params:{
+          //     userName:this.username,
+          //     userPassword:this.password
+          //   }
+          // }).then(res=>{
+          //   if(res.data){
+          //     router.pushUrl({
+          //       url:'pages/LoadingPage',
+          //       //还需要式北来写全局变量更新：username,password
+          //     })
+          //   }else{
+          //     //还需要式北来写没成功登陆的界面
+          //   }
+          // })
         })
       Button('注册') .width('95%')
         .backgroundColor(Color.Gray)

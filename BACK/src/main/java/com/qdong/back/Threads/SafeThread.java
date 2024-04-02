@@ -17,7 +17,6 @@ public class SafeThread extends Thread{
         System.out.println("Running " + UserName);
         try {
             while (!flag) {
-                System.out.println(UserName + " is running");
                 /*
                  * 安全线程的代码
                  *

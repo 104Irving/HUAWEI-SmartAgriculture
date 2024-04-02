@@ -4,6 +4,9 @@
     "pages/LoadingPage",
     "pages/MainPage",
     "pages/MineShow",
-    "pages/DetailChart"
+    "pages/DetailChart",
+    "pages/AccountSecurity",
+    "pages/UpdatesCheck",
+    "pages/About"
   ]
 }
