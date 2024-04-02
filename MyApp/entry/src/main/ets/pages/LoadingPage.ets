@@ -1,9 +1,38 @@
 import router from '@ohos.router'
+import axios from '@ohos/axios'
+
+const Params = router.getParams()
+const userName = Params['userName']
+const userPassword = Params['userPassword']
 
 @Entry
 @Component
 struct LoadingPage{
   @State message: string = '少女祈祷中......'
+
+  aboutToAppear(){
+    axios({
+      method:"get",
+      url:'http://47.108.250.206:8080/login',
+      params:{
+        userName:userName,
+        userPassword:userPassword
+      }
+    }).then(res=>{
+      if(res.data){
+        router.pushUrl({
+          url:'pages/MainPage',
+          //还需要式北来写全局变量更新：username,password
+        })
+      }else{//登录失败
+        router.back({
+          url:'pages/index',
+          params:{}
+        })
+      }
+    })
+  }
+
   build(){
     Row(){
       Column(){
@@ -12,19 +41,20 @@ struct LoadingPage{
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Black)
 
-        Button('登陆')
-          .width('95%') .margin({top:10})
-          .onClick(() =>{
-            router.pushUrl({
-              url: 'pages/MainPage' // 目标url
-            }, router.RouterMode.Standard, (err) => {
-              if (err) {
-                console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
-                return;
-              }
-              console.info('Invoke pushUrl succeeded.');
-            });
-          })
+        // Button('登陆')
+        //   .width('95%') .margin({top:10})
+          // .onClick(() =>{
+          //
+          //   // router.pushUrl({
+          //   //   url: 'pages/MainPage' // 目标url
+          //   // }, router.RouterMode.Standard, (err) => {
+          //   //   if (err) {
+          //   //     console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+          //   //     return;
+          //   //   }
+          //   //   console.info('Invoke pushUrl succeeded.');
+          //   // });
+          // })
 
         LoadingProgress()
           .color(Color.Blue)
