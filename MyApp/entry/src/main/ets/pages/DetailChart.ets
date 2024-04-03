@@ -49,7 +49,7 @@ struct DetailChart {
         FarmID: MyFarmID
       }
     }).then(res=>{
-      if(res.data){//获得数据 todo
+      if(res.data){
         this.MyFarm = new FarmBean(
           res.data[0],
           res.data[1],

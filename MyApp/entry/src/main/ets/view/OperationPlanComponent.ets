@@ -1,3 +1,19 @@
+import axios from '@ohos/axios'
+
+//对农田进行操作后上传数据到服务器的函数
+function UploadData(params:any, Interface:any){//上传的参数,和接口
+    axios({//传递到服务器请求用户管理农田的相关数据
+      method:"get",
+      url:`47.108.250.206:8080/${Interface}`,
+      params: params
+    }).then(res=>{
+      if(res.data){
+      }else{//数据获取失败
+        // 数据获取失败的处理 todo
+      }
+    })
+}
+
 //数字文本输入弹窗
 @CustomDialog
 struct OperationTextSetDialog {
@@ -37,25 +53,25 @@ struct OperationTextSetDialog {
 }
 
 //弹窗样例
-@CustomDialog
-struct CustomDialogExampleTwo {
-  controllerTwo?: CustomDialogController
-
-  build() {
-    Column() {
-      Text('我是第二个弹窗')
-        .fontSize(30)
-        .height(100)
-      Button('点我关闭第二个弹窗')
-        .onClick(() => {
-          if (this.controllerTwo != undefined) {
-            this.controllerTwo.close()
-          }
-        })
-        .margin(20)
-    }
-  }
-}
+// @CustomDialog
+// struct CustomDialogExampleTwo {
+//   controllerTwo?: CustomDialogController
+//
+//   build() {
+//     Column() {
+//       Text('我是第二个弹窗')
+//         .fontSize(30)
+//         .height(100)
+//       Button('点我关闭第二个弹窗')
+//         .onClick(() => {
+//           if (this.controllerTwo != undefined) {
+//             this.controllerTwo.close()
+//           }
+//         })
+//         .margin(20)
+//     }
+//   }
+// }
 
 //灌溉界面
 @Component
@@ -118,6 +134,9 @@ export struct WaterPlanComponent {
           useMilitaryTime: true,
           onAccept: (value: TimePickerResult) => {
             this.selectTime.setHours(value.hour, value.minute)
+            UploadData({
+              hour:this.selectTime.getHours(),
+              minute:this.selectTime.getMinutes()}, 'WaterPlanInterFace')
           }
         })
       })
@@ -180,7 +199,11 @@ export struct VentilatePlanComponent {
   aboutToDisappear() {this.FanTemController = null}
 
   onCancel() {console.info('Callback when the first button is clicked')}
-  onAccept() {console.info('Callback when the second button is clicked')}
+  onAccept() {
+    UploadData({
+      FanTemValue:this.FanTemValue, SkyLightTemValue:this.SkyLightTemValue}, 'VentilatePlanInterFace')
+    console.info('Callback when the second button is clicked')
+  }
   exitApp() {console.info('Click the callback in the blank area')}
 
   //主构造体
@@ -274,7 +297,12 @@ export struct LightSubPlanComponent {
   aboutToDisappear() {this.FanTemController = null}
 
   onCancel() {console.info('Callback when the first button is clicked')}
-  onAccept() {console.info('Callback when the second button is clicked')}
+
+  onAccept() {
+    UploadData({
+      LightSubValue:this.LightSubValue}, 'LightSubPlanInterFace')
+    console.info('Callback when the second button is clicked')
+  }
   exitApp() {console.info('Click the callback in the blank area')}
 
   //主构造体
