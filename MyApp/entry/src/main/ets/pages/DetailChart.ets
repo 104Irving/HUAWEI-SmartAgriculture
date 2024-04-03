@@ -67,12 +67,14 @@ struct DetailChart {
   loadHistoricalData(){//加载农田每一个监视量的历史数据
     axios({//传递到服务器请求用户管理农田的相关数据
       method:"get",
-      url:'47.108.250.206:8080/GetHistoricalData',
+      url:'47.108.250.206:8080/GetFarmDataList',
       params: {
         FarmID: MyFarmID
       }
     }).then(res=>{
-      if(res.data){//获得数据 todo
+      if(!(res.data === null)){//获得数据 todo
+
+
         for (let index = 0; index < 5; index++) {
           this.ResData = res.data.dataList //每一个成员都是一个数组
           this.MyOption[index] = new Options({

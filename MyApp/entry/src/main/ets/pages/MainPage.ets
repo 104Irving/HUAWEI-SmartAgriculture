@@ -38,31 +38,58 @@ struct MainPage {
 
   //更新农田数据
   loadFarmData(){
-    axios({//传递到服务器请求用户管理农田的相关数据
-      method:"get",
-      url:'47.108.250.206:8080/GetFarmSensorData',
-      params:{
-        userName: this.User.Username,
-        UserFarmList: this.User.UserFarmList,//将该用户的管理的农田的列表上传
-      }
-    }).then(res=>{
-      if(res.data){//获得数据
-        for (let index = 0; index < this.User.UserFarmList.length; index++) {
+    for (let index = 0;index < this.User.UserFarmList.length; index++){
+      axios({//传递到服务器请求用户管理农田的相关数据
+        method:"get",
+        url:'47.108.250.206:8080/FarmData',
+        params:{
+          UserID: this.User.UserID,                 //用户ID
+          FarmID: this.User.UserFarmList[index],    //将该用户的管理的农田的列表上传
+        }
+      }).then(res=>{
+        //res.data.list.
+        if(res.data){//获得数据
           this.ResData = res.data.FarmList[index] // ResData还是一个数组
           this.FarmList[index] = new FarmBean(
-            this.ResData[0], //农田ID number
-            this.ResData[1], //农田名 string
-            this.ResData[2], //温度 number
-            this.ResData[3], //空气湿度 number
-            this.ResData[4], //二氧化碳浓度 number
-            this.ResData[5], //光照强度 number
-            this.ResData[6], //土壤湿度 number
+            this.User.UserFarmList[index], //农田ID number
+            res.data.FarmName, //农田名 string
+            res.data.Temperature, //温度 number
+            res.data.humidity, //空气湿度 number
+            res.data.co2, //二氧化碳浓度 number
+            res.data.lumination, //光照强度 number
+            res.data.soilHumidity, //土壤湿度 number
           )
+        }else{//数据获取失败
+          // 数据获取失败的处理 todo
         }
-      }else{//数据获取失败
-        // 数据获取失败的处理 todo
-      }
-    })
+      })
+    }
+
+    // axios({//传递到服务器请求用户管理农田的相关数据
+    //   method:"get",
+    //   url:'47.108.250.206:8080/GetFarmSensorData',
+    //   params:{
+    //     userName: this.User.Username,
+    //     UserFarmList: this.User.UserFarmList,//将该用户的管理的农田的列表上传
+    //   }
+    // }).then(res=>{
+    //   if(res.data){//获得数据
+    //     for (let index = 0; index < this.User.UserFarmList.length; index++) {
+    //       this.ResData = res.data.FarmList[index] // ResData还是一个数组
+    //       this.FarmList[index] = new FarmBean(
+    //         this.ResData[0], //农田ID number
+    //         this.ResData[1], //农田名 string
+    //         this.ResData[2], //温度 number
+    //         this.ResData[3], //空气湿度 number
+    //         this.ResData[4], //二氧化碳浓度 number
+    //         this.ResData[5], //光照强度 number
+    //         this.ResData[6], //土壤湿度 number
+    //       )
+    //     }
+    //   }else{//数据获取失败
+    //     // 数据获取失败的处理
+    //   }
+    // })
   }
 
   aboutToAppear(){

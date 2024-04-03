@@ -91,6 +91,11 @@ export struct WaterPlanComponent {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
+          .onChange((isOn:boolean)=>{
+            if (isOn) {
+              UploadData({OpenPump: 1, ifOutdoor: 1}, 'OpenPump')
+            }
+          })
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
@@ -112,10 +117,10 @@ export struct WaterPlanComponent {
           Text('每天')}
         Row(){
           Radio({ value: '2', group: 'frequency' }).checked(false)
-          Text('每周')}
+          Text('每三天')}
         Row(){
           Radio({ value: '3', group: 'frequency' }).checked(false)
-          Text('每月')}
+          Text('每五天')}
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
@@ -136,7 +141,9 @@ export struct WaterPlanComponent {
             this.selectTime.setHours(value.hour, value.minute)
             UploadData({
               hour:this.selectTime.getHours(),
-              minute:this.selectTime.getMinutes()}, 'WaterPlanInterFace')
+              minute:this.selectTime.getMinutes(),
+              Interval: 600, //每隔多久浇一次水
+              ifOutdoor: 1}, 'WaterPlan')
           }
         })
       })
@@ -201,7 +208,8 @@ export struct VentilatePlanComponent {
   onCancel() {console.info('Callback when the first button is clicked')}
   onAccept() {
     UploadData({
-      FanTemValue:this.FanTemValue, SkyLightTemValue:this.SkyLightTemValue}, 'VentilatePlanInterFace')
+      FanTemperature:this.FanTemValue, WinTemperature:this.SkyLightTemValue}, 'VentilatePlan'
+    )
     console.info('Callback when the second button is clicked')
   }
   exitApp() {console.info('Click the callback in the blank area')}
@@ -221,6 +229,11 @@ export struct VentilatePlanComponent {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
+          .onChange((isOn:boolean)=>{
+            if (isOn) {
+              UploadData({OpenFan: 1}, 'OpenFan') //todo
+            }
+          })
 
       }
       .width('95%')
@@ -230,6 +243,11 @@ export struct VentilatePlanComponent {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
+          .onChange((isOn:boolean)=>{
+            if (isOn) {
+              UploadData({OpenWin: 1}, 'OpenWin')
+            }
+          })
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
@@ -300,7 +318,7 @@ export struct LightSubPlanComponent {
 
   onAccept() {
     UploadData({
-      LightSubValue:this.LightSubValue}, 'LightSubPlanInterFace')
+      LightSub:this.LightSubValue}, 'LightSubPlan')
     console.info('Callback when the second button is clicked')
   }
   exitApp() {console.info('Click the callback in the blank area')}
@@ -320,7 +338,11 @@ export struct LightSubPlanComponent {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
-
+          .onChange((isOn:boolean)=>{
+            if (isOn) {
+              UploadData({switch: 1}, 'OpenLightSub')
+            }
+          })
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
