@@ -22,6 +22,8 @@ struct MainPage {
   @State FarmList:FarmBean[] = []//农田的列表
   private tabController: TabsController = new TabsController();//tab转换控制器
 
+  @State ResData:any = null
+
   @Builder MyTabBuilder(idx: number){
     Column(){
       Image(idx == this.PageIndex ? MainTabItemList[idx].icon_selected : MainTabItemList[idx].icon)
@@ -46,7 +48,16 @@ struct MainPage {
     }).then(res=>{
       if(res.data){//获得数据
         for (let index = 0; index < this.User.UserFarmList.length; index++) {
-          //将联网的数据封装到list里 todo
+          this.ResData = res.data.FarmList[index] // ResData还是一个数组
+          this.FarmList[index] = new FarmBean(
+            this.ResData[0], //农田ID number
+            this.ResData[1], //农田名 string
+            this.ResData[2], //温度 number
+            this.ResData[3], //空气湿度 number
+            this.ResData[4], //二氧化碳浓度 number
+            this.ResData[5], //光照强度 number
+            this.ResData[6], //土壤湿度 number
+          )
         }
       }else{//数据获取失败
         // 数据获取失败的处理 todo

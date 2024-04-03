@@ -79,7 +79,10 @@ export default struct HomeComponent {
       .backgroundColor('#ff3b89cb')
         .onClick(()=>{
           router.pushUrl({
-            url:'pages/DetailChart'
+            url:'pages/DetailChart',
+            params:{
+              'FarmID': FarmbeanObj.fieldID //将被点击的农田ID传入
+            }
           })
         })
     }
