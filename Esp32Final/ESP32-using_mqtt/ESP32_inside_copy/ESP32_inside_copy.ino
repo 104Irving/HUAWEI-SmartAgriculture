@@ -6,6 +6,8 @@
  ************************************/
 #include <Wire.h>
 #include <WiFi.h>
+#include <WiFiUdp.h>
+#include <NTPClient.h>
 #include <SimpleDHT.h>
 #include <ESP32Servo.h>
 #include <PubSubClient.h>
@@ -40,7 +42,7 @@ typedef struct MQTT_Receive{
     int Switch;                  //水泵开关(仅手动控制状态使用) 0->关闭;1->开启
     int Time;                    //单次灌溉时长
     unsigned long long Interval; //计划操作时,间隔时间(单位:ms)
-    unsigned long long StartTime;//第一次启动前时间差
+    unsigned long long StartTime;//每次的启动时间(24h)
   };
   struct led{
     int State;                   //LED操作模式 0->基于光强进行控制;1->手动控制
@@ -69,13 +71,13 @@ const char *ssid="Gino";
 const char *password="20050601";
 
 //MQTT Broker
-const char *mqtt_broker="broker-cn.emqx.io";                  //IP地址
-const int mqtt_port=1883;                                     //端口
-const char Topic[19][40]={"Data/Inside/LightIntensity",       //0:光强
-                          "Data/Inside/Temperature",           //1:室内温度
-                          "Data/Inside/AirHumidity",           //2:室内湿度
-                          "Data/Inside/WaterTank",             //3:水箱水位
-                          "Data/Inside/Flume",                 //4:培养槽水位
+const char *mqtt_broker="broker-cn.emqx.io";               //IP地址
+const int mqtt_port=1883;                                  //端口
+const char Topic[19][40]={"Data/Inside/LightIntensity",    //0:光强
+                          "Data/Inside/Temperature",       //1:室内温度
+                          "Data/Inside/AirHumidity",       //2:室内湿度
+                          "Data/Inside/WaterTank",         //3:水箱水位
+                          "Data/Inside/Flume",             //4:培养槽水位
                           "Control/In/Bump/State",         //5:室内水泵控制模式
                           "Control/In/Bump/Switch",        //6:室内水泵开关
                           "Control/In/Bump/Time",          //7:室内水泵单次灌溉时长
@@ -90,9 +92,13 @@ const char Topic[19][40]={"Data/Inside/LightIntensity",       //0:光强
                           "Control/In/Fan/State",          //16:室内风扇控制模式
                           "Control/In/Fan/Switch",         //17:室内风扇开关
                           "Control/In/Fan/Temperature"};   //18:室内风扇开启条件
-const char *mqtt_username="ESP32_02";                         //用户名
-const char *mqtt_password="a12345678";                        //密码
-char Buff[50];                                                //发送的消息
+const char *mqtt_username="ESP32_02";                      //用户名
+const char *mqtt_password="a12345678";                     //密码
+char Buff[50];                                             //发送的消息
+
+//声明ntp
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP,"ntp.aliyun.com");             //NTP地址
 
 //声明MQTT客户端对象
 WiFiClient espClient;
@@ -123,11 +129,12 @@ byte humidity = 0;
 
 //水泵控制的相关变量
 typedef struct bump{
-  int cmp;
-  unsigned long long TimeStamp;
-  unsigned long long TimeStartInterval;
+  int cmp;                     //比较水泵状态
+  int flag;                    //已经过几天
+  int time;                    //现在时间
+  unsigned long long TimeStamp;//时间戳
 }bump;
-bump Bump={3,0,-1};
+bump Bump={3,0,-1,0};
 
 //天窗(舵机)控制的相关变量(默认关闭)
 typedef struct window{
@@ -199,6 +206,11 @@ inline void MQTT_Init(){
   for(int i=5;i<=18;i++){
     client.subscribe(Topic[i]);
   }
+
+  //初始化时间获取
+  timeClient.begin();
+  timeClient.setTimeOffset(28800);
+  /*+1区, 偏移3600，+8区, 偏移3600X8*/
 }
 
 void setup() {
@@ -224,6 +236,10 @@ void setup() {
                     &Task0,      /* Task handle to keep track of created task */
                     0);          /* pin task to core 0 */                  
   delay(100);
+
+  //ntp服务
+  timeClient.begin();
+  timeClient.setTimeOffset(28800); //+1区，偏移3600，+8区，偏移3600*8
 
   //将培养槽放水时间初始化为5s
   ReceiveData.Bump.Time=5000;
@@ -413,7 +429,7 @@ void Task0code(void * pvParameters){
         ReceiveData.Bump.Time=5000;
       }
       Bump.cmp=3;
-      Bump.TimeStamp=0;
+      Bump.time=-1;
     break;
   /*手动控制水泵*/
   case 1:
@@ -427,32 +443,31 @@ void Task0code(void * pvParameters){
           digitalWrite(BumpPin,LOW);
         }
       }
-      Bump.TimeStamp=0;
+      Bump.time=-1;
     break;
   /*计划灌溉*/
   case 2:
-      //计算时间戳并决定是否浇水
-      if(!Bump.TimeStamp){
-        Bump.TimeStamp=millis();
-        Bump.TimeStartInterval=ReceiveData.Bump.StartTime;
+      if(Bump.time==-1){
+        Bump.flag==ReceiveData.Bump.Interval;
       }
-      if(Bump.TimeStartInterval){
-        if(millis()-Bump.TimeStamp>Bump.TimeStartInterval){
-          Bump.TimeStamp=millis();
-          digitalWrite(BumpPin,HIGH);
-          while(millis()-Bump.TimeStamp<ReceiveData.Bump.Time);
-          digitalWrite(BumpPin,LOW);
-          Bump.TimeStamp=millis();
-          Bump.TimeStartInterval=0;
-        }
-        else break;
+      int currentHour = timeClient.getHours();
+      // Serial.print("Hour:");
+      // Serial.println(currentHour);
+      int currentMinute = timeClient.getMinutes();
+      // Serial.print("Hour:");
+      // Serial.println(currentHour);
+      //计算当前时间并判断是否需要浇水
+      Bump.time=currentHour*60+currentMinute;
+      if(Bump.time>=ReceiveData.Bump.StartTime-1||Bump.time<=ReceiveData.Bump.StartTime+1){
+        Bump.flag++;
       }
-      if(millis()-Bump.TimeStamp>ReceiveData.Bump.Interval){
+      if(Bump.flag>=ReceiveData.Bump.Interval){
         Bump.TimeStamp=millis();
         digitalWrite(BumpPin,HIGH);
         while(millis()-Bump.TimeStamp<ReceiveData.Bump.Time);
         digitalWrite(BumpPin,LOW);
         Bump.TimeStamp=millis();
+        Bump.flag=0;
       }
       Bump.cmp=3;
     break;
