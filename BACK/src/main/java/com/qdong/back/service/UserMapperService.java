@@ -10,35 +10,47 @@ import java.util.List;
 @Service
 public class UserMapperService{
     @Autowired
-    private UserMapper userMapper;
+    UserMapper userMapper;
+    public List<FarmData> getFarmDatas(int userId){
+        return userMapper.getFarmDatas(userId);
+    }
+    public void openLED(int Switch){
+        userMapper.openLED(Switch);
+    }
+    public void updateLED(int Condition){
+        userMapper.updateLED(Condition);
+    }
+    public void openWin(int Switch){
+        userMapper.openWin(Switch);
+    }
+    public void openFan(int Switch){
+        userMapper.openFan(Switch);
+    }
+    public void updateFan(int Temperature){
+        userMapper.updateFan(Temperature);
+    }
+    public void updateWindow(int Temperature){
+        userMapper.updateWindow(Temperature);
+    }
+    public void updateBump(int Interval, int StartHour, int StartMinute, int o_i){
+        userMapper.updateBump(Interval, StartHour, StartMinute, o_i);
+    }
+    public void OpenPump(int OpenPump, int o_i){
+        userMapper.OpenPump(OpenPump, o_i);
+    }
+    public List<FarmData> getFarmData(int userId){
+        return userMapper.getFarmDatas(userId);
+    }
+    public FarmData getFarmData(int tiandisId, int userId){
+        return userMapper.getFarmData(tiandisId, userId);
+    }
+    public int getUserId(String userName){
+        return userMapper.getUserId(userName);
+    }
+    public List<Integer> getTiandisId(int userId){
+        return userMapper.getTiandisId(userId);
+    }
     public boolean login(String userName, String userPassword) {
         return !userMapper.login(userName, userPassword).isEmpty();
-    }
-    public List<Fan> getFan(){
-        return userMapper.getFan();
-    }
-    public List<Window> getWindow(){
-        return userMapper.getWindow();
-    }
-    public List<LED> getLED(){
-        return userMapper.getLED();
-    }
-    public List<Bump> getBump(int o_i){
-        return userMapper.getBump(o_i);
-    }
-    public void insertBump(int State, int Switch, int Time, int Interval, int StartTime){
-        userMapper.insertBump(State, Switch, Time, Interval, StartTime);
-    }
-    public void updateFan(int State, int Switch, int Temperature){
-        userMapper.updateFan(State, Switch, Temperature);
-    }
-    public void updateWindow(int State, int Switch, int Temperature){
-        userMapper.updateWindow(State, Switch, Temperature);
-    }
-    public void updateLED(int State, int Switch, int Condition){
-        userMapper.updateLED(State, Switch, Condition);
-    }
-    public void updateBump(int State, int Switch, int Time, int Interval, int StartTime, int o_i){
-        userMapper.updateBump(State, Switch, Time, Interval, StartTime, o_i);
     }
 }

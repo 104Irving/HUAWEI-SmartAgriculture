@@ -28,10 +28,8 @@ public class UserThread extends Thread{
         try{
             mqttConnect.setMqttClient(null);
             while(!flag){
-                Data data = new Data(1,1,1,1,1,1,1,1,1,1,1,1);
-                Fan fan = userMapperService.getFan().get(0);
                 mqttConnect.sub("test", 0);
-                mqttConnect.pub("test", data.toString()+fan.toString(), 0);
+                mqttConnect.pub("test", "114514", 0);
                 Thread.sleep(1000);
             }
             mqttConnect.close();
