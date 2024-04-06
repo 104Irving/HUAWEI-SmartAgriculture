@@ -10,7 +10,13 @@ let userPassword = Params['userPassword']
 struct LoadingPage{
   @State message: string = '少女祈祷中......'
 
+  private timeID: number = 0 //计时器id
+
   aboutToAppear(){
+    this.timeID = setInterval(()=>{
+
+    }, 3000)
+
     axios({//传递到服务器请求用户登录和相关数据
       method:"get",
       url:'47.108.250.206:8080/GetUserData',
@@ -44,21 +50,6 @@ struct LoadingPage{
           .fontSize(30)
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.Black)
-
-        // Button('登陆')
-        //   .width('95%') .margin({top:10})
-          // .onClick(() =>{
-          //
-          //   // router.pushUrl({
-          //   //   url: 'pages/MainPage' // 目标url
-          //   // }, router.RouterMode.Standard, (err) => {
-          //   //   if (err) {
-          //   //     console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
-          //   //     return;
-          //   //   }
-          //   //   console.info('Invoke pushUrl succeeded.');
-          //   // });
-          // })
 
         LoadingProgress()
           .color(Color.Blue)

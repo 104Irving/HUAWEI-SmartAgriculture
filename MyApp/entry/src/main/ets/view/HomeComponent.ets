@@ -123,6 +123,7 @@ export default struct HomeComponent {
         }.align(Alignment.TopStart)
       }
       .width('100%')
+      .backgroundImage($r('app.media.HalftoneGreen'))
       .backgroundColor('#ffffff')
 
       //点击后显示具体数据
@@ -162,7 +163,7 @@ export default struct HomeComponent {
       Text('我管理的农田')
         .fontSize(24)
         .fontWeight(FontWeight.Bold)
-        .fontColor(Color.Orange)
+        .fontColor(Color.Black)
         .margin({ top: 10 })
       Divider().width('95%')
 
@@ -186,6 +187,7 @@ export default struct HomeComponent {
     }
     .width('100%')
     .height('100%')
+    .backgroundImage($r('app.media.HarfTone'))
     .backgroundColor('#ffe3e3e3')
   }
 

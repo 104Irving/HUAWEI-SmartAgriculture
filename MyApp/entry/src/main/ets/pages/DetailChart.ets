@@ -5,6 +5,7 @@ import {ChartItem, ChartItemList} from '../model/ChartItem'
 import { InDoorTabId, InDoorTabList } from '../model/TabItem'
 import axios from '@ohos/axios'
 import FarmBean from '../Common/Bean/Farmbean'
+import { FormerData } from '../Common/Bean/FormerData'
 
 const params = router.getParams()
 const MyFarmID = params['FarmID']
@@ -25,6 +26,7 @@ struct DetailChart {
   @State MyFarm: FarmBean = null//当前农田的相关数据
   @State ResData: any = '' //接受数据的中转体
   @State MyOption: Options[] = []//储存各个历史数据的列表,每一个成员都应该是option实例
+  @State MyFormerData: FormerData = new FormerData()
 
   //测试用数据图标
   // @State seriesOption: Options = new Options({
@@ -69,32 +71,8 @@ struct DetailChart {
       })
     }
 
-
-  // loadFarmData(){//加载农田传感器的数据
-  //   axios({//传递到服务器请求用户管理农田的相关数据
-  //     method:"get",
-  //     url:'47.108.250.206:8080/GetFarmSensorData',
-  //     params: {
-  //       FarmID: MyFarmID
-  //     }
-  //   }).then(res=>{
-  //     // if(res.data){
-  //     this.MyFarm = new FarmBean(
-  //       res.data[0],
-  //       res.data[1],
-  //       res.data[2],
-  //       res.data[3],
-  //       res.data[4],
-  //       res.data[5],
-  //       res.data[6])
-  //     // }else{//数据获取失败
-  //     //   // 数据获取失败的处理 todo
-  //     // }
-  //   })
-  // }
-
   loadHistoricalData(){//加载农田每一个监视量的历史数据
-    axios({//传递到服务器请求用户管理农田的相关数据
+    axios({            //传递到服务器请求用户管理农田的相关数据
       method:"get",
       url:'47.108.250.206:8080/GetFarmDataList',
       params: {
@@ -102,29 +80,25 @@ struct DetailChart {
       }
     }).then(res=>{
       if(!(res.data === null)){//获得数据 todo
-        for (let index = 0; index < 5; index++) {
-          this.ResData = res.data.dataList //每一个成员都是一个数组
-          this.MyOption[index] = new Options({
-            xAxis: {
-              data: [
-                '0', '0', '0', '0', '0', '0',
-                '0', '0', '0', '0', '0', '0',
-                '0', '0', '0', '0', '0', '0',
-                '0', '0', '0', '0', '0', '0']  //横轴string[]
-            },
-            yAxis: {
-              name: ChartItemList[index].ItemName //纵轴string
-            },
-            series: [
-              {
-                name: ChartItemList[index].ItemName, //图表名称 string
-                data: this.ResData[index]  //数据 number[]
-              }
-            ]
-          })
-        }
-      }else{//数据获取失败
-        // 数据获取失败的处理 todo
+        this.MyFormerData.setVal(res.data[0],res.data[0],res.data[0],res.data[0],res.data[0])
+          // this.MyOption[index] = new Options({
+          //   xAxis: {
+          //     data: [
+          //       '0', '0', '0', '0', '0', '0',
+          //       '0', '0', '0', '0', '0', '0',
+          //       '0', '0', '0', '0', '0', '0',
+          //       '0', '0', '0', '0', '0', '0']  //横轴string[]
+          //   },
+          //   yAxis: {
+          //     name: ChartItemList[index].ItemName //纵轴string
+          //   },
+          //   series: [
+          //     {
+          //       name: ChartItemList[index].ItemName, //图表名称 string
+          //       data: this.ResData[index]  //数据 number[]
+          //     }
+          //   ]
+          // })
       }
     })
   }
@@ -141,7 +115,7 @@ struct DetailChart {
     }, 1000)
   }
 
-  数据图表的更新
+  //数据图表的更新
   // aboutToAppear() {
   //   setTimeout(() => {
   //     // 传递需要修改的属性与数值，不需要全部传
@@ -180,7 +154,6 @@ struct DetailChart {
       if (this.ChartItemShowList[index]) {
         Divider()
         Column() {
-
           McLineChart({ options: this.MyOption[index] })
         }
         .width('100%')
@@ -287,6 +260,26 @@ struct DetailChart {
           .backgroundColor("#ffffff")
           .borderRadius("10")
           .onClick(() => {
+
+            this.MyOption[index] = new Options({
+              xAxis: {
+                data: [
+                  '0', '0', '0', '0', '0', '0',
+                  '0', '0', '0', '0', '0', '0',
+                  '0', '0', '0', '0', '0', '0',
+                  '0', '0', '0', '0', '0', '0']  //横轴string[]
+              },
+              yAxis: {
+                name: ChartItemList[index].ItemName //纵轴string
+              },
+              series: [
+                {
+                  name: ChartItemList[index].ItemName, //图表名称 string
+                  data: this.ResData[index]  //数据 number[]
+                }
+              ]
+            })
+
             animateTo({ duration: 250, curve: Curve.Smooth },
               () => {
                 this.ChartItemShowList[index] = !this.ChartItemShowList[index]
