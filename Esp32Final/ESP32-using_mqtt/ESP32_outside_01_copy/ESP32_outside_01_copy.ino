@@ -1,8 +1,8 @@
-/*************************
- *3区-ESP32              *
- *室外温湿度、降雨、气压   *
- *愿意和我一辈子搞嵌入式吗?*
- *************************/
+/*************************************
+ *3区-ESP32                          *
+ *室外温湿度、降雨、气压、电池电压与电量*
+ *愿意和我一辈子搞嵌入式吗?            *
+ *************************************/
 #include <Wire.h>
 #include <WiFi.h>
 #include <BMP280.h>
@@ -24,6 +24,8 @@ typedef struct MQTT_DataSend{
   int AirHumidity;    //空气湿度
   int Rain;           //降雨
   int AtomPre;        //气压
+  double Voltage;     //电池电压
+  int BatteryLevel;   //电池电量
 } MQTT_DataSend;
 MQTT_DataSend SendData;
 
@@ -34,10 +36,12 @@ const char *password="20050601";
 //MQTT Broker
 const char *mqtt_broker = "broker-cn.emqx.io";        //IP地址
 const int mqtt_port=1883;                             //端口
-const char Topic[4][40]={"Data/Outside/Temperature",  //0:室外温度
+const char Topic[6][40]={"Data/Outside/Temperature",  //0:室外温度
                          "Data/Outside/AirHumidity",  //1:室外空气湿度
                          "Data/Outside/Rain",         //2:降雨
-                         "Data/Outside/AtomPre"};     //3:气压
+                         "Data/Outside/AtomPre",      //3:气压
+                         "Data/Outside/Voltage",      //4:电池电压
+                         "Data/Outside/BatteryLevel"};//5:电池电量
 const char *mqtt_username="ESP32_01";                 //用户名
 const char *mqtt_password="a12345678";                //密码
 char Buff[50];                                        //发送的消息
@@ -52,11 +56,30 @@ BMP280 bmp280;
 
 //定义端口
 const int RainPin=4;           //降雨传感器
+const int VoltagePin=34;       //电池电压针脚
 
 //设置降雨传感器采样数量
 const int NumRead=5;           //采样数量
 int RainRead[NumRead];         //存储样本
 int Point=0;                   //指示目前最新数据
+
+/************************************
+ *计算电池电压及电量                  *
+ *使用esp32测量电池电压的20%并进行处理 *
+ *得到实际电压与电池电量              *
+ ************************************/
+inline void VolGet(double V){
+  SendData.Voltage = -3.3126889904968743e-18*V*V*V*V*V*V*V  \
+                     +1.623217605075953e-14*V*V*V*V*V*V     \
+                     -3.3719331192434486e-11*V*V*V*V*V      \
+                     +3.847999653156838e-8*V*V*V*V          \
+                     -0.00002604499123955503*V*V*V          \
+                     +0.010452452154782833*V*V              \
+                     -2.3016342267679173*V                  \
+                     +214.85012707853883;
+  SendData.Voltage *= 5;
+  SendData.BatteryLevel = 100*(SendData.Voltage-3)/1.2;
+}
 
 //初始化降雨传感器数据
 void InitRain(){
@@ -130,6 +153,8 @@ inline void MQTT_Init(){
 inline void Connect(){
   //初始化雨水传感器
   pinMode(RainPin,INPUT);
+  //初始化电压读取端口
+  pinMode(VoltagePin,INPUT);
 }
 
 //发送数据
@@ -149,6 +174,14 @@ inline void DataPublish(){
   //气压
   sprintf(Buff,"AtomPre:%d",SendData.AtomPre);
   client.publish(Topic[3],Buff);
+
+  //电池电压
+  sprintf(Buff,"Voltage:%lf",SendData.Voltage);
+  client.publish(Topic[4],Buff);
+
+  //电池电量
+  sprintf(Buff,"BatteryLevel:%lf",SendData.BatteryLevel);
+  client.publish(Topic[5],Buff);
 }
 
 /*调试代码(输出数据,检测数据发送是否成功.etc)*/
@@ -162,6 +195,10 @@ inline void Test(){
   Serial.println(SendData.Rain);
   Serial.print("气压:");
   Serial.println(SendData.AtomPre);
+  Serial.print("电池电压:");
+  Serial.println(SendData.Voltage);
+  Serial.print("电池电量:");
+  Serial.println(SendData.BatteryLevel);
 }
 
 void setup() {
@@ -181,6 +218,9 @@ void setup() {
   //初始化Aht20&Bmp280
   Detect();
 
+  //初始化引脚
+  Connect();
+
   //初始化雨水数据
   InitRain();
 }
@@ -198,6 +238,10 @@ void loop() {
   RainRead[++Point]=analogRead(RainPin);
   Point%=NumRead;
   SendData.Rain=RainGet();
+
+  //读取电池电压数据并处理
+  double V=analogRead(VoltagePin);
+  VolGet(V);
 
   //发布数据
   DataPublish();
