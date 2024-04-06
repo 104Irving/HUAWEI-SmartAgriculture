@@ -26,7 +26,8 @@ struct Index {
           this.password = value
         })
       Button('登陆')
-        .width('95%') .margin({top:10})
+        .width('95%')
+        .margin({top:10})
         .onClick(() =>{
           axios({//传递到服务器请求用户登录和相关数据
             method:"get",

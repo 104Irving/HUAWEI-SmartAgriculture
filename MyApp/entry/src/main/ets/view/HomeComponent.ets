@@ -4,11 +4,15 @@ import router from '@ohos.router';
 import { ChartItemList} from '../model/ChartItem'
 import { FarmIOTabList, FarmTabID } from '../model/TabItem';
 
+
+
 @Component
 export default struct HomeComponent {
   UserInfo: UserInfoBean
   MyFarmList:FarmBean[]//农田的列表,
   @State PageIndex: number = 0;//tab转换控制
+  @State FarmDetailShow:boolean[] = [false, false, false, false,false] //农田数据显示控制表
+
   //测试数据
   @State FarmList:FarmBean[] =
     [ new FarmBean(0, '一号田', 22.5, 56, 30, 800, 25),
@@ -16,7 +20,8 @@ export default struct HomeComponent {
       new FarmBean(2, '三号田', 22.5, 58, 30, 800, 25),
       new FarmBean(3, '四号田', 22.5, 59, 30, 800, 25),
       new FarmBean(4, 'fufu的大米田', 22.5, 60, 30, 800, 25)]
-  @State FarmDetailShow:boolean[] = [false, false, false, false,false]
+
+
 
   //tab构造函数
   @Builder MyTabBuilder(idx: number){
@@ -81,6 +86,7 @@ export default struct HomeComponent {
           router.pushUrl({
             url:'pages/DetailChart',
             params:{
+              'UserID': this.UserInfo.UserID,
               'FarmID': FarmbeanObj.fieldID //将被点击的农田ID传入
             }
           })

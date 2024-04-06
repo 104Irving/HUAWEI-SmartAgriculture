@@ -48,20 +48,20 @@ struct MainPage {
         }
       }).then(res=>{
         //res.data.list.
-        if(res.data){//获得数据
-          this.ResData = res.data.FarmList[index] // ResData还是一个数组
-          this.FarmList[index] = new FarmBean(
-            this.User.UserFarmList[index], //农田ID number
-            res.data.FarmName, //农田名 string
-            res.data.Temperature, //温度 number
-            res.data.humidity, //空气湿度 number
-            res.data.co2, //二氧化碳浓度 number
-            res.data.lumination, //光照强度 number
-            res.data.soilHumidity, //土壤湿度 number
-          )
-        }else{//数据获取失败
-          // 数据获取失败的处理 todo
-        }
+        // if(res.data){//获得数据
+        this.ResData = res.data.FarmList[index] // ResData还是一个数组
+        this.FarmList[index] = new FarmBean(
+          this.User.UserFarmList[index], //农田ID number
+          res.data.FarmName, //农田名 string
+          res.data.wendu, //温度 number
+          res.data.kongqishidu, //空气湿度 number
+          res.data.CO2nongdu, //二氧化碳浓度 number
+          res.data.gzqiangdu, //光照强度 number
+          res.data.turangshidu, //土壤湿度 number
+        )
+        // }else{//数据获取失败
+        //   // 数据获取失败的处理 todo
+        // }
       })
     }
 

@@ -93,7 +93,7 @@ export struct WaterPlanComponent {
         Toggle({type:ToggleType.Switch,isOn:false})
           .onChange((isOn:boolean)=>{
             if (isOn) {
-              UploadData({OpenPump: 1, ifOutdoor: 1}, 'OpenPump')
+              UploadData({OpenPump: 1, o_i: 1}, 'OpenPump')
             }
           })
       }
@@ -140,10 +140,10 @@ export struct WaterPlanComponent {
           onAccept: (value: TimePickerResult) => {
             this.selectTime.setHours(value.hour, value.minute)
             UploadData({
-              hour:this.selectTime.getHours(),
-              minute:this.selectTime.getMinutes(),
+              StartHour:this.selectTime.getHours(),
+              StartMinute:this.selectTime.getMinutes(),
               Interval: 600, //每隔多久浇一次水
-              ifOutdoor: 1}, 'WaterPlan')
+              o_i: 1}, 'WaterPlan')
           }
         })
       })
@@ -231,7 +231,7 @@ export struct VentilatePlanComponent {
         Toggle({type:ToggleType.Switch,isOn:false})
           .onChange((isOn:boolean)=>{
             if (isOn) {
-              UploadData({OpenFan: 1}, 'OpenFan') //todo
+              UploadData({Switch: 1}, 'OpenFan') //todo
             }
           })
 
@@ -245,7 +245,7 @@ export struct VentilatePlanComponent {
         Toggle({type:ToggleType.Switch,isOn:false})
           .onChange((isOn:boolean)=>{
             if (isOn) {
-              UploadData({OpenWin: 1}, 'OpenWin')
+              UploadData({Switch: 1}, 'OpenWin')
             }
           })
       }
@@ -318,7 +318,7 @@ export struct LightSubPlanComponent {
 
   onAccept() {
     UploadData({
-      LightSub:this.LightSubValue}, 'LightSubPlan')
+      Condition:this.LightSubValue}, 'LightSubPlan')
     console.info('Callback when the second button is clicked')
   }
   exitApp() {console.info('Click the callback in the blank area')}
@@ -340,7 +340,7 @@ export struct LightSubPlanComponent {
         Toggle({type:ToggleType.Switch,isOn:false})
           .onChange((isOn:boolean)=>{
             if (isOn) {
-              UploadData({switch: 1}, 'OpenLightSub')
+              UploadData({Switch: 1}, 'OpenLightSub')
             }
           })
       }
