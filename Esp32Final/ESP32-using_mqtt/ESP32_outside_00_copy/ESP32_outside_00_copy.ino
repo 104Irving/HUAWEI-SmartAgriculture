@@ -5,6 +5,8 @@
  *Ciallo :)        *
  *******************/
 #include <WiFi.h>
+#include <WiFiUdp.h>
+#include <NTPClient.h>
 #include <PubSubClient.h>
 
 //任务〇(数据)
@@ -25,7 +27,7 @@ typedef struct MQTT_Receive{
     int Switch;                  //水泵开关 0->关闭;1->开启
     int Time;                    //单次灌溉时长,默认为3s
     unsigned long long Interval; //计划操作时,间隔时间(单位:ms)
-    unsigned long long StartTime;//第一次启动前时间差
+    unsigned long long StartTime;//每次的启动时间(24h)
   };
   bump Bump;
   int WaterTank;                 //水箱水位
@@ -37,16 +39,16 @@ const char *ssid="Gino";
 const char *password="20050601";
 
 //MQTT Broker
-const char *mqtt_broker="broker-cn.emqx.io";                 //IP地址
+const char *mqtt_broker="broker-cn.emqx.io";                   //IP地址
 const int mqtt_port=1883;                                      //端口
 const char Topic[9][40]={"Data/Outside/SoilMoisture",          //0:土壤湿度
                          "Data/Outside/Voltage",               //1:电池电压
                          "Data/Outside/BatteryLevel",          //2:电池电量
-                         "Control/Out/Bump/State",         //3:室外水泵控制模式
-                         "Control/Out/Bump/Switch",        //4:室外水泵开关
-                         "Control/Out/Bump/Time",          //5:室外水泵单次灌溉时长
-                         "Control/Out/Bump/Interval",      //6:室外水泵灌溉间隔
-                         "Control/Out/Bump/StartTime",     //7:室外水泵第一次启动时间差
+                         "Control/Out/Bump/State",             //3:室外水泵控制模式
+                         "Control/Out/Bump/Switch",            //4:室外水泵开关
+                         "Control/Out/Bump/Time",              //5:室外水泵单次灌溉时长
+                         "Control/Out/Bump/Interval",          //6:室外水泵灌溉间隔
+                         "Control/Out/Bump/StartTime",         //7:室外水泵第一次启动时间差
                          "Data/Inside/WaterTank"};             //8:水箱水位
 const char *mqtt_username="ESP32_00";                          //用户名
 const char *mqtt_password="a12345678";                         //密码
@@ -55,6 +57,10 @@ char Buff[50];                                                 //发送的消息
 //声明MQTT客户端对象
 WiFiClient espClient;
 PubSubClient client(espClient);
+
+//声明ntp
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP,"ntp.aliyun.com");                 //NTP地址
 
 //I/O端口
 const int BumpPin=0;           //水泵针脚
@@ -68,8 +74,12 @@ int Point=0;                   //指示目前最新数据
 
 //时间戳,用于控制灌溉时间及计算第一次开启时间差
 unsigned long long TimeStamp=0;
-unsigned long long TimeStartInterval=-1;
-
+//水泵计划模式所需数据
+typedef struct bump{
+  int flag;                    //已经过几天
+  int time;                    //现在时间
+}bump;
+bump Bump={0,-1};
 //比对以判断水泵状态是否改变
 int cmp=3;
 
@@ -192,6 +202,10 @@ void setup() {
 
   //初始化土壤湿度数据
   InitMoist();
+
+  //ntp服务
+  timeClient.begin();
+  timeClient.setTimeOffset(28800); //+1区，偏移3600，+8区，偏移3600*8
 
   //将灌溉时间初始化为3s
   ReceiveData.Bump.Time=3000;
@@ -317,8 +331,7 @@ void loop() {
         digitalWrite(BumpPin,LOW);
         ReceiveData.Bump.Time=3000;
       }
-      cmp=3;
-      TimeStamp=0;
+      cmp=3; Bump.time=-1;
     break;
   /*手动控制水泵*/
   case 1:
@@ -332,32 +345,31 @@ void loop() {
           digitalWrite(BumpPin,LOW);
         }
       }
-      TimeStamp=0;
+      Bump.time=-1;
     break;
   /*计划灌溉*/
   case 2:
-      //计算时间戳并决定是否浇水
-      if(!TimeStamp){
-        TimeStamp=millis();
-        TimeStartInterval=ReceiveData.Bump.StartTime;
+      if(Bump.time==-1){
+        Bump.flag==ReceiveData.Bump.Interval;
       }
-      if(TimeStartInterval){
-        if(millis()-TimeStamp>TimeStartInterval){
-          TimeStamp=millis();
-          digitalWrite(BumpPin,HIGH);
-          while(millis()-TimeStamp<ReceiveData.Bump.Time);
-          digitalWrite(BumpPin,LOW);
-          TimeStamp=millis();
-          TimeStartInterval=0;
-        }
-        else break;
+      int currentHour = timeClient.getHours();
+      // Serial.print("Hour:");
+      // Serial.println(currentHour);
+      int currentMinute = timeClient.getMinutes();
+      // Serial.print("Hour:");
+      // Serial.println(currentHour);
+      //计算当前时间并判断是否需要浇水
+      Bump.time=currentHour*60+currentMinute;
+      if(Bump.time>=ReceiveData.Bump.StartTime-1||Bump.time<=ReceiveData.Bump.StartTime+1){
+        Bump.flag++;
       }
-      if(millis()-TimeStamp>ReceiveData.Bump.Interval){
+      if(Bump.flag>=ReceiveData.Bump.Interval){
         TimeStamp=millis();
         digitalWrite(BumpPin,HIGH);
         while(millis()-TimeStamp<ReceiveData.Bump.Time);
         digitalWrite(BumpPin,LOW);
         TimeStamp=millis();
+        Bump.flag=0;
       }
       cmp=3;
     break;
