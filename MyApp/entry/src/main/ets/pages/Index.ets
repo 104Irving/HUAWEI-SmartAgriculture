@@ -28,14 +28,39 @@ struct Index {
       Button('登陆')
         .width('95%') .margin({top:10})
         .onClick(() =>{
-          router.pushUrl({
-            url:'pages/LoadingPage',
-            //还需要式北来写全局变量更新：username,password
+          axios({//传递到服务器请求用户登录和相关数据
+            method:"get",
+            url:'47.108.250.206:8080/login',
             params:{
-              'userName':this.username,
-              'userPassword':this.password
+              userName:this.username,
+              userPassword:this.password
+            }
+          }).then(res=>{
+            if(res.data){
+              router.pushUrl({
+                url:'pages/LoadingPage',
+                //还需要式北来写全局变量更新：username,password
+                params:{
+                  'userName': this.username,
+                  'password': this.password
+                }
+              })
+            }else{//登录失败 todo
+              // router.back({
+              //   url:'pages/index',
+              //   params:{}
+              // })
             }
           })
+
+          // router.pushUrl({
+          //   url:'pages/LoadingPage',
+          //   //还需要式北来写全局变量更新：username,password
+          //   params:{
+          //     'userName':this.username,
+          //     'userPassword':this.password
+          //   }
+          // })
           // axios({
           //   method:"get",
           //   url:'http://47.108.250.206:8080/login',
@@ -57,6 +82,10 @@ struct Index {
       Button('注册') .width('95%')
         .backgroundColor(Color.Gray)
         .margin({top:10})
+        .onClick(()=>{
+
+        })
+
     }
     .width('90%')
     }

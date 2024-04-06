@@ -1,3 +1,19 @@
+import axios from '@ohos/axios'
+
+//对农田进行操作后上传数据到服务器的函数
+function UploadData(params:any, Interface:any){//上传的参数,和接口
+    axios({//传递到服务器请求用户管理农田的相关数据
+      method:"get",
+      url:`47.108.250.206:8080/${Interface}`,
+      params: params
+    }).then(res=>{
+      if(res.data){
+      }else{//数据获取失败
+        // 数据获取失败的处理 todo
+      }
+    })
+}
+
 //数字文本输入弹窗
 @CustomDialog
 struct OperationTextSetDialog {
@@ -37,25 +53,25 @@ struct OperationTextSetDialog {
 }
 
 //弹窗样例
-@CustomDialog
-struct CustomDialogExampleTwo {
-  controllerTwo?: CustomDialogController
-
-  build() {
-    Column() {
-      Text('我是第二个弹窗')
-        .fontSize(30)
-        .height(100)
-      Button('点我关闭第二个弹窗')
-        .onClick(() => {
-          if (this.controllerTwo != undefined) {
-            this.controllerTwo.close()
-          }
-        })
-        .margin(20)
-    }
-  }
-}
+// @CustomDialog
+// struct CustomDialogExampleTwo {
+//   controllerTwo?: CustomDialogController
+//
+//   build() {
+//     Column() {
+//       Text('我是第二个弹窗')
+//         .fontSize(30)
+//         .height(100)
+//       Button('点我关闭第二个弹窗')
+//         .onClick(() => {
+//           if (this.controllerTwo != undefined) {
+//             this.controllerTwo.close()
+//           }
+//         })
+//         .margin(20)
+//     }
+//   }
+// }
 
 //灌溉界面
 @Component
@@ -75,6 +91,11 @@ export struct WaterPlanComponent {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
+          .onChange((isOn:boolean)=>{
+            if (isOn) {
+              UploadData({OpenPump: 1, ifOutdoor: 1}, 'OpenPump')
+            }
+          })
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
@@ -96,10 +117,10 @@ export struct WaterPlanComponent {
           Text('每天')}
         Row(){
           Radio({ value: '2', group: 'frequency' }).checked(false)
-          Text('每周')}
+          Text('每三天')}
         Row(){
           Radio({ value: '3', group: 'frequency' }).checked(false)
-          Text('每月')}
+          Text('每五天')}
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
@@ -118,6 +139,11 @@ export struct WaterPlanComponent {
           useMilitaryTime: true,
           onAccept: (value: TimePickerResult) => {
             this.selectTime.setHours(value.hour, value.minute)
+            UploadData({
+              hour:this.selectTime.getHours(),
+              minute:this.selectTime.getMinutes(),
+              Interval: 600, //每隔多久浇一次水
+              ifOutdoor: 1}, 'WaterPlan')
           }
         })
       })
@@ -180,7 +206,12 @@ export struct VentilatePlanComponent {
   aboutToDisappear() {this.FanTemController = null}
 
   onCancel() {console.info('Callback when the first button is clicked')}
-  onAccept() {console.info('Callback when the second button is clicked')}
+  onAccept() {
+    UploadData({
+      FanTemperature:this.FanTemValue, WinTemperature:this.SkyLightTemValue}, 'VentilatePlan'
+    )
+    console.info('Callback when the second button is clicked')
+  }
   exitApp() {console.info('Click the callback in the blank area')}
 
   //主构造体
@@ -198,6 +229,11 @@ export struct VentilatePlanComponent {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
+          .onChange((isOn:boolean)=>{
+            if (isOn) {
+              UploadData({OpenFan: 1}, 'OpenFan') //todo
+            }
+          })
 
       }
       .width('95%')
@@ -207,6 +243,11 @@ export struct VentilatePlanComponent {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
+          .onChange((isOn:boolean)=>{
+            if (isOn) {
+              UploadData({OpenWin: 1}, 'OpenWin')
+            }
+          })
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)
@@ -274,7 +315,12 @@ export struct LightSubPlanComponent {
   aboutToDisappear() {this.FanTemController = null}
 
   onCancel() {console.info('Callback when the first button is clicked')}
-  onAccept() {console.info('Callback when the second button is clicked')}
+
+  onAccept() {
+    UploadData({
+      LightSub:this.LightSubValue}, 'LightSubPlan')
+    console.info('Callback when the second button is clicked')
+  }
   exitApp() {console.info('Click the callback in the blank area')}
 
   //主构造体
@@ -292,7 +338,11 @@ export struct LightSubPlanComponent {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
-
+          .onChange((isOn:boolean)=>{
+            if (isOn) {
+              UploadData({switch: 1}, 'OpenLightSub')
+            }
+          })
       }
       .width('95%')
       .justifyContent(FlexAlign.SpaceBetween)

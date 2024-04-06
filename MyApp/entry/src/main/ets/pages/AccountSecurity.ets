@@ -4,7 +4,7 @@ import router from '@ohos.router';
 @Entry
 @Component
 struct AccountSecurity{
-  @State user: UserInfoBean = new UserInfoBean("老张","without",[]);
+  @State user: UserInfoBean = new UserInfoBean("老张",0,[]);
 
   @Builder ElementShow(name: String, detail: any) {
     Row() {
@@ -31,7 +31,7 @@ struct AccountSecurity{
         .width('95%')
       this.ElementShow("用户名",this.user.Username)
       this.ElementShow("头像",this.user.Username)
-      this.ElementShow("管理的农田",this.user.UserFarm)
+      this.ElementShow("管理的农田",this.user.UserFarmList)
 
 
       Text("<  返回")
