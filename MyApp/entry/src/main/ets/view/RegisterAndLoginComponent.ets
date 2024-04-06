@@ -65,6 +65,7 @@ export struct LRComponent{
             .onChange((value) =>{
               this.commit = value
             })
+            .transition({ type: TransitionType.All, opacity: 0})
         }
 
         Button('登陆')
