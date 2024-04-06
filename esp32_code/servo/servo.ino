@@ -7,7 +7,7 @@ void setup() {
   Serial.begin(115200);
   
   // 将舵机连接到ESP32的GPIO引脚
-  servo.attach(16); // GPIO引脚
+  servo.attach(32); // GPIO引脚
 }
 
 void loop() {

@@ -8,6 +8,7 @@ import FarmBean from '../Common/Bean/Farmbean'
 
 const params = router.getParams()
 const MyFarmID = params['FarmID']
+const MyUserID = params['UserID']
 
 //显示该农田某一项数据具体信息及时间轴图标的页面
 @Entry
@@ -21,8 +22,8 @@ struct DetailChart {
   @State PageIndex: number = 0;//tab转换控制
 
   //数据变量
-  @State MyFarm: FarmBean = null //当前农田的相关数据
-  @State ResData: any = null //接受数据的中转体
+  @State MyFarm: FarmBean = null//当前农田的相关数据
+  @State ResData: any = '' //接受数据的中转体
   @State MyOption: Options[] = []//储存各个历史数据的列表,每一个成员都应该是option实例
 
   //测试用数据图标
@@ -41,28 +42,56 @@ struct DetailChart {
   //   ]
   // })
 
-  loadFarmData(){//加载农田传感器的数据
-    axios({//传递到服务器请求用户管理农田的相关数据
-      method:"get",
-      url:'47.108.250.206:8080/GetFarmSensorData',
-      params: {
-        FarmID: MyFarmID
-      }
-    }).then(res=>{
-      if(res.data){
+  //更新农田数据
+  loadFarmData(){
+      axios({//传递到服务器请求用户管理农田的相关数据
+        method:"get",
+        url:'47.108.250.206:8080/FarmData',
+        params:{
+          UserID: MyUserID,
+          FarmID: MyFarmID,
+        }
+      }).then(res=>{
+        //res.data.list.
+        // if(res.data){//获得数据
         this.MyFarm = new FarmBean(
-          res.data[0],
-          res.data[1],
-          res.data[2],
-          res.data[3],
-          res.data[4],
-          res.data[5],
-          res.data[6])
-      }else{//数据获取失败
-        // 数据获取失败的处理 todo
-      }
-    })
-  }
+          MyFarmID, //农田ID number
+          res.data.FarmName, //农田名 string
+          res.data.wendu, //温度 number
+          res.data.kongqishidu, //空气湿度 number
+          res.data.CO2nongdu, //二氧化碳浓度 number
+          res.data.gzqiangdu, //光照强度 number
+          res.data.turangshidu, //土壤湿度 number
+        )
+        // }else{//数据获取失败
+        //   // 数据获取失败的处理 todo
+        // }
+      })
+    }
+
+
+  // loadFarmData(){//加载农田传感器的数据
+  //   axios({//传递到服务器请求用户管理农田的相关数据
+  //     method:"get",
+  //     url:'47.108.250.206:8080/GetFarmSensorData',
+  //     params: {
+  //       FarmID: MyFarmID
+  //     }
+  //   }).then(res=>{
+  //     // if(res.data){
+  //     this.MyFarm = new FarmBean(
+  //       res.data[0],
+  //       res.data[1],
+  //       res.data[2],
+  //       res.data[3],
+  //       res.data[4],
+  //       res.data[5],
+  //       res.data[6])
+  //     // }else{//数据获取失败
+  //     //   // 数据获取失败的处理 todo
+  //     // }
+  //   })
+  // }
 
   loadHistoricalData(){//加载农田每一个监视量的历史数据
     axios({//传递到服务器请求用户管理农田的相关数据
@@ -73,21 +102,23 @@ struct DetailChart {
       }
     }).then(res=>{
       if(!(res.data === null)){//获得数据 todo
-
-
         for (let index = 0; index < 5; index++) {
           this.ResData = res.data.dataList //每一个成员都是一个数组
           this.MyOption[index] = new Options({
             xAxis: {
-              data: this.ResData[0]  //横轴string[]
+              data: [
+                '0', '0', '0', '0', '0', '0',
+                '0', '0', '0', '0', '0', '0',
+                '0', '0', '0', '0', '0', '0',
+                '0', '0', '0', '0', '0', '0']  //横轴string[]
             },
             yAxis: {
-              name: this.ResData[1] //纵轴string
+              name: ChartItemList[index].ItemName //纵轴string
             },
             series: [
               {
-                name: this.ResData[2], //图表名称 string
-                data: this.ResData[3]  //数据 number[]
+                name: ChartItemList[index].ItemName, //图表名称 string
+                data: this.ResData[index]  //数据 number[]
               }
             ]
           })
@@ -110,23 +141,23 @@ struct DetailChart {
     }, 1000)
   }
 
-  //数据图表的更新
+  数据图表的更新
   // aboutToAppear() {
-    // setTimeout(() => {
-    //   // 传递需要修改的属性与数值，不需要全部传
-    //   this.seriesOption.setVal({
-    //     series:[
-    //       {
-    //         name:'最高气温',
-    //         data:[110, 110, 150, 130, 120, 190, 100]
-    //       },
-    //     {
-    //     name:'最低气温',
-    //     data:[1, -20, 2, 5, 3, 2, 0]
-    //   }
-    //     ]
-    //   })
-    // }, 2000)
+  //   setTimeout(() => {
+  //     // 传递需要修改的属性与数值，不需要全部传
+  //     this.seriesOption.setVal({
+  //       series:[
+  //         {
+  //           name:'最高气温',
+  //           data:[110, 110, 150, 130, 120, 190, 100]
+  //         },
+  //       {
+  //       name:'最低气温',
+  //       data:[1, -20, 2, 5, 3, 2, 0]
+  //     }
+  //       ]
+  //     })
+  //   }, 2000)
   // }
 
   //呈现数据图表的函数
@@ -142,10 +173,14 @@ struct DetailChart {
 
         Text(`${ChartItemList[index].ItemName}`)
           .fontSize(30)
-      }.width("100%")
+      }
+      .width("100%")
+      .backgroundImage($r("app.media.HalftoneGreen"))
 
       if (this.ChartItemShowList[index]) {
+        Divider()
         Column() {
+
           McLineChart({ options: this.MyOption[index] })
         }
         .width('100%')
@@ -250,6 +285,7 @@ struct DetailChart {
             this.ListItemShow(index)
           }
           .backgroundColor("#ffffff")
+          .borderRadius("10")
           .onClick(() => {
             animateTo({ duration: 250, curve: Curve.Smooth },
               () => {

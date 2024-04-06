@@ -25,7 +25,7 @@ struct LoadingPage{
           params:{
             'userName': userName,
             'usrID': res.data.userID,
-            'usrFarmList': res.data.usrFarmList
+            'usrFarmList': res.data.List
           }
         })
       }else{//登录失败
