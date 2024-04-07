@@ -142,10 +142,10 @@ export default struct HomeComponent {
       ForEach(this.FarmDetailShow, (FarmShow:boolean, index:number) => {
         //FarmShow不能删除,删除会不能预览
         ListItem() {
-          this.FarmListItem(this.MyFarmList[index].name, this.MyFarmList[index].fieldID)
+          this.FarmListItem(this.MyFarmList[index].name,index)
         }
-        // .opacity(0.7)//透明度选项
         .onClick(()=>{
+          // console.log(this.FarmDetailShow[index]?`${index} true`:`${index} false`)
           animateTo({
             duration: 650,
             curve: Curve.Smooth },

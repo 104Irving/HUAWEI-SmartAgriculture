@@ -25,6 +25,7 @@ struct LoadingPage{
       }
     }).then(res=>{
       if(res.data){
+
         router.pushUrl({
           url:'pages/MainPage',
           //还需要式北来写全局变量更新：username,password

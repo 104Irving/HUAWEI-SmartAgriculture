@@ -7,19 +7,34 @@ import FarmBean from '../Common/Bean/Farmbean';
 import axios from '@ohos/axios';
 
 //从loading界面获取到的用户数据
-const Params = router.getParams()
-const userName = Params['userName']
-const userID = Params['usrID']
-const usrFarmList = Params['usrFarmList']
+// const Params = router.getParams()
+// const userName = Params['userName']
+// const userID = Params['usrID']
+// const usrFarmList = Params['usrFarmList']
+
+//测试用数据
+const userName = "测试用户"
+const userID = 0
+const usrFarmList = [0,1,2,3]
+
 
 @Entry
 @Component
 struct MainPage {
   private timeID:number = 0 //计时器id
 
+
   public User: UserInfoBean = new UserInfoBean(userName, userID, usrFarmList);
   @State PageIndex: number = 0; //页面索引
-  @State FarmList:FarmBean[] = []//农田的列表
+  // @State FarmList:FarmBean[] = []//农田的列表
+  @State FarmList:FarmBean[] = [
+    new FarmBean(0, '测试农田',0,0,0,0,0),
+    new FarmBean(0, '测试农田',0,0,0,0,0),
+    new FarmBean(2, '测试农田',0,0,0,0,0),
+    new FarmBean(3, '测试农田',0,0,0,0,0),
+    new FarmBean(4, '测试农田',0,0,0,0,0),
+  ]//农田的列表
+
   private tabController: TabsController = new TabsController();//tab转换控制器
 
   @State ResData:any = null
@@ -37,70 +52,44 @@ struct MainPage {
   }
 
   //更新农田数据
-  loadFarmData(){
-    for (let index = 0;index < this.User.UserFarmList.length; index++){
-      axios({//传递到服务器请求用户管理农田的相关数据
-        method:"get",
-        url:'47.108.250.206:8080/FarmData',
-        params:{
-          UserID: this.User.UserID,                 //用户ID
-          FarmID: this.User.UserFarmList[index],    //将该用户的管理的农田的列表上传
-        }
-      }).then(res=>{
-        //res.data.list.
-        // if(res.data){//获得数据
-        this.ResData = res.data.FarmList[index] // ResData还是一个数组
-        this.FarmList[index] = new FarmBean(
-          this.User.UserFarmList[index], //农田ID number
-          res.data.FarmName, //农田名 string
-          res.data.wendu, //温度 number
-          res.data.kongqishidu, //空气湿度 number
-          res.data.CO2nongdu, //二氧化碳浓度 number
-          res.data.gzqiangdu, //光照强度 number
-          res.data.turangshidu, //土壤湿度 number
-        )
-        // }else{//数据获取失败
-        //   // 数据获取失败的处理 todo
-        // }
-      })
-    }
+  // loadFarmData(){
+  //   for (let index = 0;index < this.User.UserFarmList.length; index++){
+  //     axios({//传递到服务器请求用户管理农田的相关数据
+  //       method:"get",
+  //       url:'47.108.250.206:8080/FarmData',
+  //       params:{
+  //         UserID: this.User.UserID,                 //用户ID
+  //         FarmID: this.User.UserFarmList[index],    //将该用户的管理的农田的列表上传
+  //       }
+  //     }).then(res=>{
+  //       //res.data.list.
+  //       // if(res.data){//获得数据
+  //       this.ResData = res.data.FarmList[index] // ResData还是一个数组
+  //       this.FarmList[index] = new FarmBean(
+  //         this.User.UserFarmList[index], //农田ID number
+  //         res.data.FarmName, //农田名 string
+  //         res.data.wendu, //温度 number
+  //         res.data.kongqishidu, //空气湿度 number
+  //         res.data.CO2nongdu, //二氧化碳浓度 number
+  //         res.data.gzqiangdu, //光照强度 number
+  //         res.data.turangshidu, //土壤湿度 number
+  //       )
+  //       // }else{//数据获取失败
+  //       //   // 数据获取失败的处理 todo
+  //       // }
+  //     })
+  //   }
+  // }
 
-    axios({//传递到服务器请求用户管理农田的相关数据
-      method:"get",
-      url:'47.108.250.206:8080/GetFarmSensorData',
-      params:{
-        userName: this.User.Username,
-        UserFarmList: this.User.UserFarmList,//将该用户的管理的农田的列表上传
-      }
-    }).then(res=>{
-      if(res.data){//获得数据
-        for (let index = 0; index < this.User.UserFarmList.length; index++) {
-          this.ResData = res.data.FarmList[index] // ResData还是一个数组
-          this.FarmList[index] = new FarmBean(
-            this.ResData[0], //农田ID number
-            this.ResData[1], //农田名 string
-            this.ResData[2], //温度 number
-            this.ResData[3], //空气湿度 number
-            this.ResData[4], //二氧化碳浓度 number
-            this.ResData[5], //光照强度 number
-            this.ResData[6], //土壤湿度 number
-          )
-        }
-      }else{//数据获取失败
-        // 数据获取失败的处理
-      }
-    })
-  }
-
-  aboutToAppear(){
-    //获取农田初始数据
-    this.loadFarmData();
-
-    //每一秒更新一次农田数据
-    this.timeID = setInterval(()=>{
-      this.loadFarmData()
-    }, 1000)
-  }
+  // aboutToAppear(){
+  //   //获取农田初始数据
+  //   this.loadFarmData();
+  //
+  //   //每一秒更新一次农田数据
+  //   this.timeID = setInterval(()=>{
+  //     this.loadFarmData()
+  //   }, 1000)
+  // }
 
   //主构造体
   build() {
