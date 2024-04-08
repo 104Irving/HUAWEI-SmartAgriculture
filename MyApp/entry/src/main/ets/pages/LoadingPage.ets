@@ -13,35 +13,33 @@ struct LoadingPage{
   private timeID: number = 0 //计时器id
 
   aboutToAppear(){
-    this.timeID = setInterval(()=>{
+    setTimeout(()=>{
+      axios({//传递到服务器请求用户登录和相关数据
+        method:"get",
+        url:'47.108.250.206:8080/GetUserData',
+        params:{
+          userName:userName
+        }
+      }).then(res=>{
 
-    }, 3000)
-
-    axios({//传递到服务器请求用户登录和相关数据
-      method:"get",
-      url:'47.108.250.206:8080/GetUserData',
-      params:{
-        userName:userName
-      }
-    }).then(res=>{
-      if(res.data){
+        // console.log(JSON.stringify(res))
+        // console.log(res.data["list"])
+        // for (let index = 0; index < res.data.List.length; index++) {
+        //   console.log(`${res.data.List[index]}`);
+        // }
 
         router.pushUrl({
           url:'pages/MainPage',
-          //还需要式北来写全局变量更新：username,password
           params:{
             'userName': userName,
-            'usrID': res.data.userID,
-            'usrFarmList': res.data.List
+            'usrID': res.data["userId"],
+            'usrFarmList': res.data["list"]
           }
         })
-      }else{//登录失败
-        router.back({
-          url:'pages/index',
-          params:{}
-        })
-      }
+      })
     })
+
+
   }
 
   build(){

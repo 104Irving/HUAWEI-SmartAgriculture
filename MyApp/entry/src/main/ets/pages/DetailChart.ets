@@ -25,7 +25,81 @@ struct DetailChart {
   //数据变量
   @State MyFarm: FarmBean = null//当前农田的相关数据
   @State ResData: any = '' //接受数据的中转体
-  @State MyOption: Options[] = []//储存各个历史数据的列表,每一个成员都应该是option实例
+  @State MyOption: Options[] = [
+    new Options({
+        xAxis: {
+          data: ['0', '4', '8', '12', '16', '20']
+        },
+        yAxis: {
+          name: '温度统计'
+        },
+        series: [
+          {
+            name: '气温',
+            data: [11, 11, 15, 13, 12, 13, 10]
+          }
+        ]
+      }),
+
+    new Options({
+      xAxis: {
+        data: ['0', '4', '8', '12', '16', '20']
+      },
+      yAxis: {
+        name: '空气湿度统计'
+      },
+      series: [
+        {
+          name: '空气湿度',
+          data: [11, 11, 15, 13, 12, 13, 10]
+        }
+      ]
+    }),
+
+    new Options({
+      xAxis: {
+        data: ['0', '4', '8', '12', '16', '20']
+      },
+      yAxis: {
+        name: '土壤湿度统计'
+      },
+      series: [
+        {
+          name: '土壤湿度',
+          data: [11, 11, 15, 13, 12, 13, 10]
+        }
+      ]
+    }),
+
+    new Options({
+    xAxis: {
+      data: ['0', '4', '8', '12', '16', '20']
+    },
+    yAxis: {
+      name: 'CO2浓度统计'
+    },
+    series: [
+      {
+        name: 'CO2',
+        data: [11, 11, 15, 13, 12, 13, 10]
+      }
+    ]
+  }),
+    new Options({
+    xAxis: {
+      data: ['0', '4', '8', '12', '16', '20']
+    },
+    yAxis: {
+      name: '光照强度统计'
+    },
+    series: [
+      {
+        name: '光照强度',
+        data: [11, 11, 15, 13, 12, 13, 10]
+      }
+    ]
+  }),
+  ]//储存各个历史数据的列表,每一个成员都应该是option实例
   @State MyFormerData: FormerData = new FormerData()
 
   //测试用数据图标
@@ -46,29 +120,27 @@ struct DetailChart {
 
   //更新农田数据
   loadFarmData(){
-      axios({//传递到服务器请求用户管理农田的相关数据
-        method:"get",
-        url:'47.108.250.206:8080/FarmData',
-        params:{
-          UserID: MyUserID,
-          FarmID: MyFarmID,
-        }
-      }).then(res=>{
-        //res.data.list.
-        // if(res.data){//获得数据
-        this.MyFarm = new FarmBean(
-          MyFarmID, //农田ID number
-          res.data.FarmName, //农田名 string
-          res.data.wendu, //温度 number
-          res.data.kongqishidu, //空气湿度 number
-          res.data.CO2nongdu, //二氧化碳浓度 number
-          res.data.gzqiangdu, //光照强度 number
-          res.data.turangshidu, //土壤湿度 number
-        )
-        // }else{//数据获取失败
-        //   // 数据获取失败的处理 todo
-        // }
-      })
+      // axios({//传递到服务器请求用户管理农田的相关数据
+      //   method:"get",
+      //   url:'47.108.250.206:8080/FarmData',
+      //   params:{
+      //     UserID: MyUserID,
+      //     FarmID: MyFarmID,
+      //   }
+      // }).then(res=>{
+      //   //res.data.list.
+      //   // if(res.data){//获得数据
+      //   this.MyFarm = new FarmBean(
+      //     MyFarmID, //农田ID number
+      //     res.data.FarmName, //农田名 string
+      //     res.data.wendu, //温度 number
+      //     res.data.kongqishidu, //空气湿度 number
+      //     res.data.CO2nongdu, //二氧化碳浓度 number
+      //     res.data.gzqiangdu, //光照强度 number
+      //     res.data.turangshidu, //土壤湿度 number
+      //     false
+      //   )
+      // })
     }
 
   loadHistoricalData(){//加载农田每一个监视量的历史数据
@@ -79,7 +151,7 @@ struct DetailChart {
         FarmID: MyFarmID
       }
     }).then(res=>{
-      if(!(res.data === null)){//获得数据 todo
+      if(!(res.data === null)){
         this.MyFormerData.setVal(res.data[0],res.data[0],res.data[0],res.data[0],res.data[0])
           // this.MyOption[index] = new Options({
           //   xAxis: {
@@ -261,24 +333,24 @@ struct DetailChart {
           .borderRadius("10")
           .onClick(() => {
 
-            this.MyOption[index] = new Options({
-              xAxis: {
-                data: [
-                  '0', '0', '0', '0', '0', '0',
-                  '0', '0', '0', '0', '0', '0',
-                  '0', '0', '0', '0', '0', '0',
-                  '0', '0', '0', '0', '0', '0']  //横轴string[]
-              },
-              yAxis: {
-                name: ChartItemList[index].ItemName //纵轴string
-              },
-              series: [
-                {
-                  name: ChartItemList[index].ItemName, //图表名称 string
-                  data: this.ResData[index]  //数据 number[]
-                }
-              ]
-            })
+            // this.MyOption[index] = new Options({
+            //   xAxis: {
+            //     data: [
+            //       '0', '0', '0', '0', '0', '0',
+            //       '0', '0', '0', '0', '0', '0',
+            //       '0', '0', '0', '0', '0', '0',
+            //       '0', '0', '0', '0', '0', '0']  //横轴string[]
+            //   },
+            //   yAxis: {
+            //     name: ChartItemList[index].ItemName //纵轴string
+            //   },
+            //   series: [
+            //     {
+            //       name: ChartItemList[index].ItemName, //图表名称 string
+            //       data: this.ResData[index]  //数据 number[]
+            //     }
+            //   ]
+            // })
 
             animateTo({ duration: 250, curve: Curve.Smooth },
               () => {

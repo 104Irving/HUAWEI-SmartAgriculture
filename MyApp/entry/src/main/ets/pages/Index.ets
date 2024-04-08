@@ -1,5 +1,11 @@
-import router from '@ohos.router';
-import axios from "@ohos/axios";
+/*
+* * * * * * * * * * * * * * *
+* * * * * * * * * * * * * * *
+* * * 前端项目主体由式北完成 * * *
+* * * * * * * * * * * * * * *
+* * * * * * * * * * * * * * *
+ */
+
 import { LRComponent } from '../view/RegisterAndLoginComponent';
 
 @Entry

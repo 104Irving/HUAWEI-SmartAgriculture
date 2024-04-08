@@ -1,7 +1,6 @@
 //数据格式
 export interface ChartItem{
   ItemName:string //数据名
-  //需要变量的数据表,需要联网获得 todo
   Image:Resource //数据的图标
 }
 

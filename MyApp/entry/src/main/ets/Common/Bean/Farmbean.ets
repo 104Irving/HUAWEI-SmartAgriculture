@@ -6,6 +6,7 @@ export default class FarmBean {
   co2: number;//二氧化碳浓度
   lumination: number;//光照强度
   soilHumidity: number;//土壤湿度
+  If_show:boolean = false //
 
   //相当于是初始化函数
   constructor(fieldId: number,
@@ -14,7 +15,8 @@ export default class FarmBean {
               humidity:number,
               co2: number,
               lumination: number,
-              soilHumidity: number)
+              soilHumidity: number,
+              ifShow: boolean)
   {
     this.fieldID = fieldId;
     this.name = name;
@@ -23,6 +25,7 @@ export default class FarmBean {
     this.co2 = co2;
     this.lumination = lumination;
     this.soilHumidity = soilHumidity
+    this.If_show = ifShow
   }
 
 }

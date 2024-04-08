@@ -1,27 +1,28 @@
-import FarmBean from '../common/bean/FarmBean';
+// @ts-nocheck
+// @ts-nocheck
+import FarmBean from '../Common/Bean/Farmbean'
 import UserInfoBean from '../Common/Bean/UserInfoBean';
 import router from '@ohos.router';
 import { ChartItemList} from '../model/ChartItem'
 import { FarmIOTabList, FarmTabID } from '../model/TabItem';
-
-
+import axios from '@ohos/axios';
+import { FarmShowDialog } from './HomeComponentDialog';
 
 @Component
 export default struct HomeComponent {
-  UserInfo: UserInfoBean
-  MyFarmList:FarmBean[]//农田的列表,
+  UserInfo: UserInfoBean = new UserInfoBean('userName', 0, []);
+  MyFarmList:FarmBean[] = []//农田的列表
+  private timeID:number = 0 //计时器id
   @State PageIndex: number = 0;//tab转换控制
   @State FarmDetailShow:boolean[] = [false, false, false, false,false] //农田数据显示控制表
 
-  //测试数据
-  @State FarmList:FarmBean[] =
-    [ new FarmBean(0, '一号田', 22.5, 56, 30, 800, 25),
-      new FarmBean(1, '二号田', 22.5, 57, 30, 800, 25),
-      new FarmBean(2, '三号田', 22.5, 58, 30, 800, 25),
-      new FarmBean(3, '四号田', 22.5, 59, 30, 800, 25),
-      new FarmBean(4, 'fufu的大米田', 22.5, 60, 30, 800, 25)]
-
-
+  //构造管理农田权限的弹窗
+  FarmShowDialog: CustomDialogController = new CustomDialogController({
+    builder: FarmShowDialog({
+      UserInfo: this.UserInfo,
+      FarmDetailShow:this.MyFarmList
+    })
+  })
 
   //tab构造函数
   @Builder MyTabBuilder(idx: number){
@@ -55,7 +56,7 @@ export default struct HomeComponent {
       Divider()
         .width('95%')
       Row(){
-        Image($r('app.media.Senser'))
+        Image($r("app.media.Sensor"))
           .width(40)
           .height(40)
           .margin(10)
@@ -67,7 +68,6 @@ export default struct HomeComponent {
           .margin({ top: 10 })
       }
       .height("7%")
-
 
       Divider()
         .width('95%')
@@ -124,7 +124,7 @@ export default struct HomeComponent {
       }
       .width('100%')
       .backgroundImage($r('app.media.HalftoneGreen'))
-      .backgroundColor('#ffffff')
+      // .backgroundColor('#ffffff')
 
       //点击后显示具体数据
       Row(){
@@ -138,24 +138,124 @@ export default struct HomeComponent {
 
   //展示农田列表的函数
   @Builder FarmListShow(){
-    List({space: 8}) {
-      ForEach(this.FarmDetailShow, (FarmShow:boolean, index:number) => {
-        //FarmShow不能删除,删除会不能预览
-        ListItem() {
-          this.FarmListItem(this.MyFarmList[index].name,index)
-        }
+    Column(){
+      Row(){
+      Button("权限管理")
         .onClick(()=>{
-          // console.log(this.FarmDetailShow[index]?`${index} true`:`${index} false`)
-          animateTo({
-            duration: 650,
-            curve: Curve.Smooth },
-            () => {this.FarmDetailShow[index] = !this.FarmDetailShow[index]})
+          this.FarmShowDialog.open()
         })
-      })
     }
-    .height('100%')
-    .listDirection(Axis.Vertical) //列表垂直方向布局
+
+      List({space: 8}) {
+        ForEach(this.MyFarmList, (Farm:FarmBean, index:number) => {
+          //FarmShow不能删除,删除会不能预览
+          ListItem() {
+            this.FarmListItem(this.MyFarmList[index].name,index)
+            // FarmListItemComponent({UserInfo:this.UserInfo, MyFarm: this.MyFarmList[index]})
+          }
+          .onClick(()=>{
+            // console.log(this.FarmDetailShow[index]?`${index} true`:`${index} false`)
+            animateTo({
+              duration: 650,
+              curve: Curve.Smooth },
+              () => {this.FarmDetailShow[index] = !this.FarmDetailShow[index]})
+          })
+        })
+      }
+      .height('100%')
+      .listDirection(Axis.Vertical) //列表垂直方向布局
+      .scrollBar(BarState.Auto)
+    }
   }
+
+  // loadFarmData(){
+  //   this.MyFarmList = []
+  //
+  //   for (let index = 0;index < this.UserInfo.UserFarmList.length; index++){
+  //
+  //     axios({//传递到服务器请求用户管理农田的相关数据
+  //       method:"get",
+  //       url:'47.108.250.206:8080/FarmData',
+  //       params:{
+  //         UserID: this.UserInfo.UserID,                 //用户ID
+  //         FarmID: this.UserInfo.UserFarmList[index],    //将该用户的管理的农田的列表上传
+  //       }
+  //     }).then(res=>{
+  //
+  //       this.MyFarmList[index] = new FarmBean(
+  //         this.UserInfo.UserFarmList[index], //农田ID number
+  //         res.data["farmName"], //农田名 string
+  //         res.data["wendu"], //温度 number
+  //         res.data["kongqishidu"], //空气湿度 number
+  //         res.data["co2nongdu"], //二氧化碳浓度 number
+  //         res.data["gzqiangdu"], //光照强度 number
+  //         res.data["turangshidu"], //土壤湿度 number
+  //         this.MyFarmList[index].If_show
+  //       )
+  //       console.log(`${this.MyFarmList[index].name}`)
+  //     })
+  //
+  //     // this.MyFarmList[index] = new FarmBean(
+  //     //   this.UserInfo.UserFarmList[index],
+  //     //   '测试',
+  //     //   Math.random(),
+  //     //   Math.random(),
+  //     //   Math.random(),
+  //     //   Math.random(),
+  //     //   Math.random(),
+  //     //   false
+  //     // )
+  //   }
+  // }
+
+  // loadFarmData(){
+  //   this.MyFarmList = []
+  //   for (let index = 0;index < this.User.UserFarmList.length; index++){
+  //
+  //     axios({//传递到服务器请求用户管理农田的相关数据
+  //       method:"get",
+  //       url:'47.108.250.206:8080/FarmData',
+  //       params:{
+  //         UserID: this.UserInfo.UserID,                 //用户ID
+  //         FarmID: this.UserInfo.UserFarmList[index],    //将该用户的管理的农田的列表上传
+  //       }
+  //     }).then(res=>{
+  //
+  //       setTimeout(() => {
+  //         console.log(JSON.stringify(res))
+  //         this.FarmList[index] = new FarmBean(
+  //           this.User.UserFarmList[index], //农田ID number
+  //           res.data["farmName"], //农田名 string
+  //           res.data["wendu"], //温度 number
+  //           res.data["kongqishidu"], //空气湿度 number
+  //           res.data["co2nongdu"], //二氧化碳浓度 number
+  //           res.data["gzqiangdu"], //光照强度 number
+  //           res.data["turangshidu"], //土壤湿度 number
+  //           false
+  //         )
+  //       }, 50)
+  //     })
+  //
+  //     this.FarmList[index] = new FarmBean(
+  //       this.User.UserFarmList[index],
+  //       '测试',
+  //       Math.random(),
+  //       Math.random(),
+  //       Math.random(),
+  //       Math.random(),
+  //       Math.random(),
+  //       false
+  //     )
+  //     console.log(`${this.FarmList[index].If_show}`)
+  //   }
+  // }
+  //
+  // aboutToAppear(){
+  //   //每一秒更新一次农田数据
+  //   this.timeID = setInterval(()=>{
+  //     this.loadFarmData()
+  //   }, 1000)
+  // }
 
   //主构造体
   build() {
@@ -187,7 +287,6 @@ export default struct HomeComponent {
     }
     .width('100%')
     .height('100%')
-    .backgroundImage($r('app.media.HarfTone'))
     .backgroundColor('#ffe3e3e3')
   }
 
