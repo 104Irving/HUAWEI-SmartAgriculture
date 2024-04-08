@@ -7,9 +7,9 @@ import java.util.List;
 @Data
 public class UserData {
     int UserId;
-    List<Integer> list;
-    public UserData(int userId, List<Integer> list) {
+    int[] List;
+    public UserData(int userId, int[] list) {
         UserId = userId;
-        this.list = list;
+        this.List = list;
     }
 }
