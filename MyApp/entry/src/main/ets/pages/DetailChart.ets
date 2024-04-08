@@ -51,7 +51,7 @@ struct DetailChart {
       series: [
         {
           name: '空气湿度',
-          data: [11, 11, 15, 13, 12, 13, 10]
+          data: [42, 45, 50, 42, 44, 44, 47]
         }
       ]
     }),
@@ -66,7 +66,7 @@ struct DetailChart {
       series: [
         {
           name: '土壤湿度',
-          data: [11, 11, 15, 13, 12, 13, 10]
+          data: [30, 35, 36, 66, 56, 46, 42]
         }
       ]
     }),
@@ -81,7 +81,7 @@ struct DetailChart {
     series: [
       {
         name: 'CO2',
-        data: [11, 11, 15, 13, 12, 13, 10]
+        data: [23, 24, 25, 22, 26, 24, 29]
       }
     ]
   }),
@@ -143,43 +143,32 @@ struct DetailChart {
       // })
     }
 
-  loadHistoricalData(){//加载农田每一个监视量的历史数据
-    axios({            //传递到服务器请求用户管理农田的相关数据
-      method:"get",
-      url:'47.108.250.206:8080/GetFarmDataList',
-      params: {
-        FarmID: MyFarmID
-      }
-    }).then(res=>{
-      if(!(res.data === null)){
-        this.MyFormerData.setVal(res.data[0],res.data[0],res.data[0],res.data[0],res.data[0])
-          // this.MyOption[index] = new Options({
-          //   xAxis: {
-          //     data: [
-          //       '0', '0', '0', '0', '0', '0',
-          //       '0', '0', '0', '0', '0', '0',
-          //       '0', '0', '0', '0', '0', '0',
-          //       '0', '0', '0', '0', '0', '0']  //横轴string[]
-          //   },
-          //   yAxis: {
-          //     name: ChartItemList[index].ItemName //纵轴string
-          //   },
-          //   series: [
-          //     {
-          //       name: ChartItemList[index].ItemName, //图表名称 string
-          //       data: this.ResData[index]  //数据 number[]
-          //     }
-          //   ]
-          // })
-      }
-    })
-  }
+  // loadHistoricalData(){//加载农田每一个监视量的历史数据
+  //   axios({            //传递到服务器请求用户管理农田的相关数据
+  //     method:"get",
+  //     url:'47.108.250.206:8080/GetFarmDataList',
+  //     params: {
+  //       FarmID: MyFarmID
+  //     }
+  //   }).then(res=>{
+  //     if(!(res.data === null)){
+  //       for (let index = 0; index < 5; index++) {
+  //         this.MyOption[index] = new Options({
+  //           series: [
+  //             { //图表名称 string
+  //               data: res.data[index]  //数据 number[]
+  //             }]
+  //         })
+  //       }
+  //     }
+  //   })
+  // }
 
   aboutToAppear(){
     //获取农田初始数据
     this.loadFarmData();
     //获取历史图表数据,暂时先只获取一次
-    this.loadHistoricalData();
+    // this.loadHistoricalData();
 
     //每一秒更新一次农田数据
     this.timeID = setInterval(()=>{
