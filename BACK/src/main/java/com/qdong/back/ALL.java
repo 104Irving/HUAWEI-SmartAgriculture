@@ -115,7 +115,7 @@ public class ALL {
     public void LightSubPlan(HttpServletRequest R){
         userMapperService.updateLED(Integer.parseInt(R.getParameter("Condition")));
     }
-    @RequestMapping("/openWin")
+    @RequestMapping("/OpenWin")
     public void openWin(HttpServletRequest R){
         userMapperService.openWin(Integer.parseInt(R.getParameter("Switch")));
     }

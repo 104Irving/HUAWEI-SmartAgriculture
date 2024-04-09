@@ -2,6 +2,7 @@ package com.qdong.back.Threads;
 
 import com.qdong.back.mqtt.MQTTConnect;
 import com.qdong.back.service.UserMapperService;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -88,12 +89,17 @@ public class UserThread extends Thread{
                     userMapperService.InsertOuttiandi();
                     starttime=LocalDateTime.now();
                 }
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             }
             mqttConnect.close();
         }catch (Exception e) {
             System.out.println("Thread " +  UserName + " interrupted.");
             System.out.println(e);
+            try {
+                mqttConnect.close();
+            } catch (MqttException ex) {
+                throw new RuntimeException(ex);
+            }
         }finally {
             System.out.println("Thread " +  UserName + " exiting.");
         }
