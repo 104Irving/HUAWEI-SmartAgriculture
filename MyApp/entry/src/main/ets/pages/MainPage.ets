@@ -60,8 +60,8 @@ struct MainPage {
         method:"get",
         url:'47.108.250.206:8080/FarmData',
         params:{
-          UserID: this.User.UserID,                 //用户ID
-          FarmID: this.User.UserFarmList[index],    //将该用户的管理的农田的列表上传
+          //用户ID
+          FarmID: String(this.User.UserFarmList[index]),    //将该用户的管理的农田的列表上传
         }
       }).then(res=>{
 
@@ -101,7 +101,7 @@ struct MainPage {
     //每一秒更新一次农田数据
     this.timeID = setInterval(()=>{
       this.loadFarmData()
-    }, 10000)
+    }, 1000)
   }
 
   onPageShow(){

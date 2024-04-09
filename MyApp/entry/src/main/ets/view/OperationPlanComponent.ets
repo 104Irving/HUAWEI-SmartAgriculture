@@ -95,7 +95,7 @@ export struct WaterPlanComponent {
         Toggle({type:ToggleType.Switch,isOn:false})
           .onChange((isOn:boolean)=>{
             if (isOn) {
-              UploadData({OpenPump: 1, o_i: 1}, 'OpenPump')
+              UploadData({OpenPump: isOn? '1':'0', o_i: '1'}, 'OpenPump')
             }
           })
       }
@@ -232,9 +232,7 @@ export struct VentilatePlanComponent {
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
           .onChange((isOn:boolean)=>{
-            if (isOn) {
-              UploadData({Switch: 1}, 'OpenFan') //todo
-            }
+            UploadData({Switch: isOn? 1:0}, 'OpenFan') //todo
           })
 
       }
@@ -246,9 +244,8 @@ export struct VentilatePlanComponent {
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
           .onChange((isOn:boolean)=>{
-            if (isOn) {
-              UploadData({Switch: 1}, 'OpenWin')
-            }
+            UploadData({Switch: isOn? 1:0}, 'OpenWin')
+
           })
       }
       .width('95%')
@@ -341,9 +338,7 @@ export struct LightSubPlanComponent {
           .fontWeight(FontWeight.Bold)
         Toggle({type:ToggleType.Switch,isOn:false})
           .onChange((isOn:boolean)=>{
-            if (isOn) {
-              UploadData({Switch: 1}, 'OpenLightSub')
-            }
+            UploadData({Switch: isOn? 1:0}, 'OpenLightSub')
           })
       }
       .width('95%')
