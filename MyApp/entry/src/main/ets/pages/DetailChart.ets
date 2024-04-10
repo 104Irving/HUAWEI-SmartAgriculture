@@ -247,23 +247,23 @@ struct DetailChart {
         Row({space:8}){
 
           //天气状况
-          Column(){
-            Text("天气情况(未完成)")
-              .fontSize(30)
-          }
-          .width("45%")
-          .height("30%")
-          .backgroundColor("#ffc10d0d")
+          // Column(){
+          //   Text("天气情况(未完成)")
+          //     .fontSize(30)
+          // }
+          // .width("45%")
+          // .height("30%")
+          // .backgroundColor("#ffc10d0d")
 
           //预计降雨
-          Column({space:8}){
-            Text("预计降雨\n(未完成)")
-              .fontSize(30)
-            Text("想想再加一个什么模块\n(未完成)")
-              .fontSize(30)
-          }
-          .width("50%")
-          .backgroundColor("#ff00e231")
+          // Column({space:8}){
+          //   Text("预计降雨\n(未完成)")
+          //     .fontSize(30)
+          //   Text("想想再加一个什么模块\n(未完成)")
+          //     .fontSize(30)
+          // }
+          // .width("50%")
+          // .backgroundColor("#ff00e231")
         }
         .transition({ type: TransitionType.All, opacity: 0})
 
