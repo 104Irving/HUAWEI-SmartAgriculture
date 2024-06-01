@@ -80,6 +80,23 @@ struct MainPage {
         }, 50)
       })
 
+      // this.FarmList[index] = new FarmBean(
+      //   this.User.UserFarmList[index],
+      //   '测试',
+      //   Math.random(),
+      //   Math.random(),
+      //   Math.random(),
+      //   Math.random(),
+      //   Math.random(),
+      //   false
+      // )
+      console.log(`${this.FarmList[index].If_show}`)
+    }
+  }
+
+  aboutToAppear(){
+    for (let index = 0;index < this.User.UserFarmList.length; index++){
+
       this.FarmList[index] = new FarmBean(
         this.User.UserFarmList[index],
         '测试',
@@ -90,11 +107,7 @@ struct MainPage {
         Math.random(),
         false
       )
-      console.log(`${this.FarmList[index].If_show}`)
     }
-  }
-
-  aboutToAppear(){
     //获取农田初始数据
     this.loadFarmData();
 

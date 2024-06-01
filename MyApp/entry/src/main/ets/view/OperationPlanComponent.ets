@@ -28,12 +28,12 @@ struct OperationTextSetDialog {
 
   build() {
     Column() {
-      Text('设定温度阈值').fontSize(20).margin({ bottom: 10 })
+      Text('设定阈值').fontSize(20).margin({ bottom: 10 })
       TextInput({ placeholder: '', text: String(this.textValue) }).height(60).width('90%')
         .onChange((value: string) => {
           this.inputValue = Number(value)
         })
-      Text('温度范围在10-40').fontSize(16).margin({ bottom: 10 })
+      // Text('温度范围在10-40').fontSize(16).margin({ bottom: 10 })
       Flex({ justifyContent: FlexAlign.SpaceAround }) {
         Button('取消')
           .onClick(() => {
