@@ -29,6 +29,18 @@
 			<version>3.1.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org</groupId>
+			<artifactId>opencv</artifactId>
+			<scope>system</scope>
+			<version>4.9.0</version>
+			<systemPath>${project.basedir}\src\main\resources\lib.opencv\opencv-490.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>cn.bigmodel.openapi</groupId>
+			<artifactId>oapi-java-sdk</artifactId>
+			<version>release-V4-2.0.2</version>
+		</dependency>
+		<dependency>
 		<groupId>commons-fileupload</groupId>
 		<artifactId>commons-fileupload</artifactId>
 		<version>1.4</version>
@@ -43,11 +55,6 @@
 			<artifactId>spring-integration-mqtt</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.paho</groupId>
-			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-			<version>1.2.2</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jdbc</artifactId>
 		</dependency>
@@ -60,7 +67,6 @@
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>3.0.3</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
@@ -83,15 +89,15 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.QDONG</groupId>
-			<artifactId>BACK</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
 			<version>1.2.5</version>
 		</dependency>
+        <dependency>
+            <groupId>com.vaadin.external.google</groupId>
+            <artifactId>android-json</artifactId>
+            <version>0.0.20131108.vaadin1</version>
+        </dependency>
 	</dependencies>
 
 	<build>
