@@ -10,10 +10,6 @@
         <module name="BACK" />
       </profile>
     </annotationProcessing>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="BACK" options="-parameters" />
-    </option>
+    <bytecodeTargetLevel target="19" />
   </component>
 </project>

@@ -100,7 +100,7 @@ public interface UserMapper {
     void updateFan(int Temperature);
     @Update("update win set Temperature = #{Temperature} where id = 1")
     void updateWindow(int Temperature);
-    @Update("update bump set stt =2,Interval = #{Interval},StartHour = #{StartHour},StartMinute = #{StartMinute}where o_i = #{o_i}")
+    @Update("update bumps set stt =2,Interval = #{Interval},StartHour = #{StartHour},StartMinute = #{StartMinute}where o_i = #{o_i}")
     void updateBump(int Interval, int StartHour, int StartMinute, int o_i);
     @Update("update bumps set stt =1,Switch = #{OpenPump} where o_i = #{o_i}")
     void OpenPump(int OpenPump, int o_i);

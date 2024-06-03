@@ -9,14 +9,89 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @CrossOrigin
 public class ALL {
     static UserThread userThread;
     @Autowired
     UserMapperService userMapperService;
+
+    @RequestMapping("/Control/Out/Bump/State")
+    public String OutBumpState(){
+        return userMapperService.OutBumpState();
+    }
+    @RequestMapping("/Control/Out/Bump/Switch")
+    public String OutBumpSwitch(){
+        return userMapperService.OutBumpSwitch();
+    }
+    @RequestMapping("/Control/Out/Bump/Time")
+    public String OutBumpTime(){
+        return userMapperService.OutBumpTime();
+    }
+    @RequestMapping("/Control/Out/Bump/Interval")
+    public String OutBumpInterval(){
+        return userMapperService.OutBumpInterval();
+    }
+    @RequestMapping("/Control/Out/Bump/StartTime")
+    public String OutBumpStartTime(){
+        return userMapperService.OutBumpStartTime();
+    }
+    @RequestMapping("/Control/In/Bump/State")
+    public String InBumpState(){
+        return userMapperService.InBumpState();
+    }
+    @RequestMapping("/Control/In/Bump/Switch")
+    public String InBumpSwitch(){
+        return userMapperService.InBumpSwitch();
+    }
+    @RequestMapping("/Control/In/Bump/Time")
+    public String InBumpTime(){
+        return userMapperService.InBumpTime();
+    }
+    @RequestMapping("/Control/In/Bump/Interval")
+    public String InBumpInterval(){
+        return userMapperService.InBumpInterval();
+    }
+    @RequestMapping("/Control/In/Bump/StartTime")
+    public String InBumpStartTime(){
+        return userMapperService.InBumpStartTime();
+    }
+    @RequestMapping("/Control/In/LED/State")
+    public String InLEDState(){
+        return userMapperService.InLEDState();
+    }
+    @RequestMapping("/Control/In/LED/Switch")
+    public String InLEDSwitch(){
+        return userMapperService.InLEDSwitch();
+    }
+    @RequestMapping("/Control/In/LED/Condition")
+    public String InLEDCondition(){
+        return userMapperService.InLEDCondition();
+    }
+    @RequestMapping("/Control/In/Window/State")
+    public String InWindowState(){
+        return userMapperService.InWindowState();
+    }
+    @RequestMapping("/Control/In/Window/Switch")
+    public String InWindowSwitch(){
+        return userMapperService.InWindowSwitch();
+    }
+    @RequestMapping("/Control/In/Window/Temperature")
+    public String InWindowTemperature(){
+        return userMapperService.InWindowTemperature();
+    }
+    @RequestMapping("/Control/In/Fan/State")
+    public String InFanState(){
+        return userMapperService.InFanState();
+    }
+    @RequestMapping("/Control/In/Fan/Switch")
+    public String InFanSwitch(){
+        return userMapperService.InFanSwitch();
+    }
+    @RequestMapping("/Control/In/Fan/Temperature")
+    public String InFanTemperature(){
+        return userMapperService.InFanTemperature();
+    }
     @RequestMapping("/Inside/AirHumidity")
     public void Data_Inside_AirHumidity(@RequestBody String string){
         String[] strings = string.split("\"");
