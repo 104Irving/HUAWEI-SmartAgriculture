@@ -2,30 +2,18 @@ package com.qdong.back;
 
 
 import org.bytedeco.javacv.*;
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.opencv.opencv_core.Mat;
 import org.mybatis.spring.annotation.MapperScan;
-import org.opencv.highgui.HighGui;
-import org.opencv.videoio.VideoCapture;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 @SpringBootApplication
 @MapperScan("com.qdong.back.mapper")
 public class BackApplication {
-	private static CanvasFrame canvasFrame;
-	private static FrameGrabber frameGrabber;
-	private static Socket socket;
-	public static void main(String[] args) throws IOException {
+
+	public static void main(String[] args){
         SpringApplication.run(BackApplication.class, args);
 	}
 }
