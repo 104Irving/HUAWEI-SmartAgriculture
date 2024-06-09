@@ -10,6 +10,8 @@ export interface TabItem {
 //主界面tab转换列表
 export enum MainTabID {
   HOME,
+  AIChat,
+  VIDEO,
   MINE
 }
 
@@ -22,10 +24,23 @@ export const MainTabItemList: TabItem[] = [
 
   },
   {
+    icon:$r("app.media.V"),
+    icon_selected: $r("app.media.V_S"),
+    title: 'AI',
+    id:MainTabID.AIChat
+  },
+  {
+    icon:$r("app.media.AI"),
+    icon_selected: $r("app.media.AI_S"),
+    title: '摄像头',
+    id:MainTabID.MINE
+  },
+  {
   icon:$r('app.media.user0'),
   icon_selected: $r('app.media.user1'),
   title: '我的',
-  id:MainTabID.MINE },
+  id:MainTabID.MINE
+  },
 ]
 
 

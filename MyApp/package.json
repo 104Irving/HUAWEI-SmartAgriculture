@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@ohos/axios": "^1.0.4",
-    "axios": "^1.6.8"
+    "axios": "^1.6.8",
+    "requests": "^0.3.0"
   }
 }

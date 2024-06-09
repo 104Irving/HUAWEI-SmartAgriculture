@@ -122,7 +122,7 @@ struct DetailChart {
   loadFarmData(){
       // axios({//传递到服务器请求用户管理农田的相关数据
       //   method:"get",
-      //   url:'47.108.250.206:8080/FarmData',
+      //   url:'localhost:8080/FarmData',
       //   params:{
       //     UserID: MyUserID,
       //     FarmID: MyFarmID,
@@ -146,7 +146,7 @@ struct DetailChart {
   // loadHistoricalData(){//加载农田每一个监视量的历史数据
   //   axios({            //传递到服务器请求用户管理农田的相关数据
   //     method:"get",
-  //     url:'47.108.250.206:8080/GetFarmDataList',
+  //     url:'localhost:8080/GetFarmDataList',
   //     params: {
   //       FarmID: MyFarmID
   //     }

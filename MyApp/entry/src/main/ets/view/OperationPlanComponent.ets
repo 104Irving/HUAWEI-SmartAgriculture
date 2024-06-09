@@ -4,7 +4,7 @@ import axios from '@ohos/axios'
 function UploadData(params:any, Interface:any){//上传的参数,和接口
     axios({//传递到服务器请求用户管理农田的相关数据
       method:"get",
-      url:`47.108.250.206:8080/${Interface}`,
+      url:'localhost:8080/${Interface}',
       params: params
     }).then(res=>{
       if(res.data){

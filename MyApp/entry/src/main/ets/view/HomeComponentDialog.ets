@@ -30,7 +30,7 @@ export struct TextInputDialog {
           .onClick(() => {
             axios({//确认以后上传农田ID,由服务器添加农田权限
               method:"get",
-              url:'47.108.250.206:8080/AddFarm',
+              url:'localhost:8080/AddFarm',
               params:{
                 UserID: this.UserInfo.UserID,                 //用户ID
                 FarmID: this.inputValue,        //将该用户希望添加的农田ID
@@ -76,7 +76,7 @@ export struct FarmShowDialog {
           .onClick(()=>{
             axios({//传递到服务器请求用户登录和相关数据
               method:"get",
-              url:'47.108.250.206:8080/GetUserData',
+              url:'localhost:8080/GetUserData',
               params:{
                 userName:this.UserInfo.Username
               }

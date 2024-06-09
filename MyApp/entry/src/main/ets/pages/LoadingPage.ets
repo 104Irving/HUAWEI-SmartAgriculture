@@ -16,7 +16,7 @@ struct LoadingPage{
     setTimeout(()=>{
       axios({//传递到服务器请求用户登录和相关数据
         method:"get",
-        url:'47.108.250.206:8080/GetUserData',
+        url:'localhost:8080/GetUserData',
         params:{
           userName:userName
         }

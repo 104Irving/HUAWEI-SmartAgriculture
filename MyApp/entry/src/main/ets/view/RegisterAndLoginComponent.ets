@@ -76,7 +76,7 @@ export struct LRComponent{
             if (this.LorR){
               axios({//传递到服务器请求用户登录和相关数据
                 method:"get",
-                url:'47.108.250.206:8080/login',
+                url:'http://localhost:8080/login',
                 params:{
                   userName:this.username,
                   userPassword:this.password
@@ -111,7 +111,7 @@ export struct LRComponent{
               if (this.password == this.commit) {
                 axios({//传递到服务器请求用户登录和相关数据
                   method:"get",
-                  url:'47.108.250.206:8080/Register',
+                  url:'localhost:8080/Register',
                   params:{
                     userName:this.username,
                     userPassword:this.password

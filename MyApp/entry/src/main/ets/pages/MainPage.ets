@@ -2,6 +2,8 @@ import UserInfoBean from '../Common/Bean/UserInfoBean';
 import { MainTabID, MainTabItemList } from '../model/TabItem';
 import HomeComponent from '../view/HomeComponent';
 import { MineComponent } from '../view/MineComponent';
+import  AIChat from '../view/AIChat';
+import  VIDEO from '../view/VIDEO';
 import router from '@ohos.router';
 import FarmBean from '../Common/Bean/Farmbean';
 import axios from '@ohos/axios';
@@ -58,7 +60,7 @@ struct MainPage {
 
       axios({//传递到服务器请求用户管理农田的相关数据
         method:"get",
-        url:'47.108.250.206:8080/FarmData',
+        url:'localhost:8080/FarmData',
         params:{
           //用户ID
           FarmID: String(this.User.UserFarmList[index]),    //将该用户的管理的农田的列表上传
@@ -135,9 +137,19 @@ struct MainPage {
       }
       .tabBar(this.MyTabBuilder(MainTabID.HOME))
 
+      //跟miku聊聊天吧
+      TabContent(){AIChat()}
+      .tabBar(this.MyTabBuilder(MainTabID.AIChat))
+
+      TabContent(){VIDEO()}
+      .tabBar(this.MyTabBuilder(MainTabID.VIDEO))
+
       //用户页面
       TabContent(){MineComponent()}
       .tabBar(this.MyTabBuilder(MainTabID.MINE))
+
+
+
     }
     .barWidth('100%')
     .barMode(BarMode.Fixed)

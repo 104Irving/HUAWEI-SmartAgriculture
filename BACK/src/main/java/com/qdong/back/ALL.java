@@ -216,11 +216,8 @@ public class ALL {
     public boolean login(HttpServletRequest R) {
         String userName = R.getParameter("userName");
         String userPassword = R.getParameter("userPassword");
+
         boolean tf=userMapperService.login(userName, userPassword);
-        if(tf){
-            userThread = new UserThread(userName, userPassword, userMapperService);
-            userThread.start();
-        }
         return tf;
     }
     @RequestMapping("/GetFarmDataList")
